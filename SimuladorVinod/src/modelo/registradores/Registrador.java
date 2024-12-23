@@ -12,4 +12,8 @@ public class Registrador {
 			this.registrador[i] = memLine[i];
 		}
 	}
+	
+	public int[] getRegistrador() {
+		return registrador;
+	}
 }

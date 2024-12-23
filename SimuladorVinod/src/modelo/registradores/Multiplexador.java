@@ -9,5 +9,6 @@ public class Multiplexador {
 		entradas = new ArrayList<Integer[]>(entradasSize);
 		controle = new int[controleSize];
 	}
-
+	
+	
 }
