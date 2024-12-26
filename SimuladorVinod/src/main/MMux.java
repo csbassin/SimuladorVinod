@@ -15,4 +15,9 @@ public class MMux extends Multiplexador{
 		}
 		return entradas.get(0);
 	}
+	
+	public void setEntradas(Integer[] mpc, Integer[] addr) {
+    	this.entradas.set(0, mpc);
+    	this.entradas.set(1, addr);
+    }
 }
