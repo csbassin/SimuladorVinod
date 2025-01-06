@@ -39,6 +39,52 @@ public class UnidadeControle extends Thread{
 				mir.set(mmux.getSaida());
 				// fim subciclo 1
 				
+				// Subciclo 2 ------------------------------
+				
+				//Pegando valores dos registradores
+            	int regA = registradores.get(mir.getRegisterA());
+            	int regB = registradores.get(mir.getRegisterB());
+
+				//Configurando o latchaA
+           		latchA.setValue(mir.isAMuxEnabled() ? mbr.getValue() : regA);
+
+				//configurando o latchB com o valor do registrador B
+            	latchB.setValue(regB);
+				// fim subciclo 2 ------------------------------
+
+				// Subciclo 3 ------------------------------
+
+				//Determinando os valores de entrada do ULA
+           	 	int valorA = mir.isAMuxEnabled() ? mbr.getValue() : latchA.getValue();
+            	int valorB = latchB.getValue();
+
+				//Executando a operação da ULA
+            	int resultadoULA = ula.operar(valorA, valorB, mir.getULAOperation());
+
+				// O resultado da ULA passa pelo deslocador
+            	int resultadoFinal = deslocador.deslocar(resultadoULA, mir.getShiftType());
+            	
+				//Se a microinstrução pedir, gravamos o valor do latch B no registrador de endereço (MAR)
+				if (mir.isMARWriteEnabled()) {
+                	mar.setValue(latchB.getValue());
+            	}
+				
+				// fim subciclo 3 ------------------------------
+
+				// Subciclo 4 ------------------------------
+
+				//Se a microinstrução habilitar o MBR, gravamos o resultado la
+           	 	if (mir.isMBREnabled()) {
+                	mbr.setValue(resultadoFinal);
+            	}
+
+				//Gravar o resultado no registrador especificado(Se a microinstrução permitir, claro)
+            	if (mir.isEnCEnabled()) {
+                	registradores.set(mir.getBarC(), resultadoFinal);
+            	}
+
+				// fim subciclo 4 ------------------------------
+
 				
 				sleep(sleepInMillis);
 			} catch (InterruptedException e) {
