@@ -1,0 +1,35 @@
+package util;
+
+import java.util.ArrayList;
+
+import modelo.registradores.Acumulador;
+import modelo.registradores.Amask;
+import modelo.registradores.InstructionRegister;
+import modelo.registradores.ProgramCounter;
+import modelo.registradores.Registrador;
+import modelo.registradores.RegistradorMenosUm;
+import modelo.registradores.RegistradorUm;
+import modelo.registradores.RegistradorZero;
+import modelo.registradores.Smask;
+import modelo.registradores.StackPointer;
+import modelo.registradores.TemporaryInstructionRegister;
+
+public class GetRegistrador {
+	private ArrayList<Registrador> registradoresVd = new ArrayList<>(16);
+	public GetRegistrador() {
+		registradoresVd.add(new ProgramCounter());
+		registradoresVd.add(new Acumulador());
+		registradoresVd.add(new StackPointer());
+		registradoresVd.add(new InstructionRegister());
+		registradoresVd.add(new TemporaryInstructionRegister());
+		registradoresVd.add(new RegistradorZero());
+		registradoresVd.add(new RegistradorUm());
+		registradoresVd.add(new RegistradorMenosUm());
+		registradoresVd.add(new Amask());
+		registradoresVd.add(new Smask());
+	}
+	
+	public Registrador get(int registrador) {
+		return registradoresVd.get(registrador);
+	}
+}

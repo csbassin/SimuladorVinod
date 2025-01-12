@@ -3,6 +3,12 @@ package main;
 import java.util.ArrayList;
 
 import modelo.AMux;
+import modelo.MemoriaPrincipal;
+import modelo.ULA;
+import modelo.registradores.MemoryBufferRegisterRead;
+import modelo.registradores.MemoryBufferRegisterWrite;
+import util.Conversoes;
+import util.GetRegistrador;
 import visao.WindowData;
 
 public class UnidadeControle extends Thread{
@@ -16,7 +22,12 @@ public class UnidadeControle extends Thread{
 		MicroinstructionRegister mir = new MicroinstructionRegister();
 		IncrementMicroprogramCounter impc = new IncrementMicroprogramCounter(mpc);
 		ControladorDeFluxo cdf = new ControladorDeFluxo();
+		MemoriaPrincipal memoriaPrincipal = new MemoriaPrincipal();
 		MMux mmux = new MMux();
+		ULA ula = new ULA();
+		MemoryBufferRegisterRead mbrRead = new MemoryBufferRegisterRead(memoriaPrincipal);
+		MemoryBufferRegisterWrite mbrWrite = new MemoryBufferRegisterWrite(memoriaPrincipal);
+		GetRegistrador gr = new GetRegistrador();
 		Integer[] zeroValue = new Integer[32];
 		for(int i = 0; i<32; i++) {
 			zeroValue[i] = 0;
@@ -42,14 +53,12 @@ public class UnidadeControle extends Thread{
 				// Subciclo 2 ------------------------------
 				
 				//Pegando valores dos registradores
-            	int regA = registradores.get(mir.getRegisterA());
-            	int regB = registradores.get(mir.getRegisterB());
-
-				//Configurando o latchaA
-           		latchA.setValue(mir.isAMuxEnabled() ? mbr.getValue() : regA);
-
-				//configurando o latchB com o valor do registrador B
-            	latchB.setValue(regB);
+            	int[] latchA;
+            	int[] latchB = gr.get(Conversoes.bitArrayToDecimal(mir.getPieceAs32bit(16, 19))).getRegistrador();
+            	if(mir.getPieceAs32bit(0, 0).get(31) == 1) {
+            		mbrRead.read();
+            		latchA = mbrRead.getRegistrador();
+            	}
 				// fim subciclo 2 ------------------------------
 
 				// Subciclo 3 ------------------------------
@@ -59,6 +68,7 @@ public class UnidadeControle extends Thread{
             	int valorB = latchB.getValue();
 
 				//Executando a operação da ULA
+            	ula.setA();
             	int resultadoULA = ula.operar(valorA, valorB, mir.getULAOperation());
 
 				// O resultado da ULA passa pelo deslocador

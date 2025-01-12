@@ -4,7 +4,22 @@ public class ULA {
     // A, B, F, R;
     private int[] A, B, F, D, R;
 
-    public ULA(){
+    public int[] getA() {
+		return A;
+	}
+	public int[] getB() {
+		return B;
+	}
+	public int[] getF() {
+		return F;
+	}
+	public void setD(int[] d) {
+		D = d;
+	}
+	public void setR(int[] r) {
+		R = r;
+	}
+	public ULA(){
         R = new int[16];
         D = new int[2]; //D = NZ
     }
