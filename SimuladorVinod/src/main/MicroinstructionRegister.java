@@ -22,4 +22,11 @@ public class MicroinstructionRegister extends Registrador{
 		}
 		return list;
 	}
+	public ArrayList<Integer> getSlice(int start, int end){
+		ArrayList<Integer> list = new ArrayList<>(end-start+1);
+		for(int i = start; i<=end; i++) {
+			list.add(this.registrador[i]);
+		}
+		return list;
+	}
 }

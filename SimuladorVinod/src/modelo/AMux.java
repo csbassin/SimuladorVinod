@@ -4,7 +4,9 @@ import modelo.registradores.Multiplexador;
 
 public class AMux extends Multiplexador{
     public AMux() {
-        super(2,2);
+        super(2,1);
+        entradas.add(null);
+        entradas.add(null);
     }
 
     public void setControle(int[]controle) {

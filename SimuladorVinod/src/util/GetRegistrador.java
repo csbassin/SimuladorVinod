@@ -27,6 +27,8 @@ public class GetRegistrador {
 		registradoresVd.add(new RegistradorMenosUm());
 		registradoresVd.add(new Amask());
 		registradoresVd.add(new Smask());
+		for (int i=0;  i<6; i++)
+			registradoresVd.add(new Registrador(16));
 	}
 	
 	public Registrador get(int registrador) {
