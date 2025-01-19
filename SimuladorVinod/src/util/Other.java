@@ -1,7 +1,8 @@
 package util;
 
 public class Other {
-	public static final String[] microInstructionsAsStrings = new String[]{"mar:=pc; rd;",
+	public static final String[] microInstructionsAsStrings = new String[]{
+			"mar:=pc; rd;",
 			"pc:=pc + 1; rd;",
 			"ir:=mbr; if n then goto 28;",
 			"tir:=lshift(ir + ir); if n then goto 19;",

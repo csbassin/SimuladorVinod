@@ -13,12 +13,6 @@ public class ULA {
 	public int[] getF() {
 		return F;
 	}
-	public void setD(int[] d) {
-		D = d;
-	}
-	public void setR(int[] r) {
-		R = r;
-	}
 	public ULA(){
         R = new int[16];
         D = new int[2]; //D = NZ
@@ -81,6 +75,8 @@ public class ULA {
         //Atualiza o D (sempre acontece)
         if (R[0] == 1)
             D[0] = 1; //N
+        else
+            D[0] = 0;
 
         //Zero flag (sempre acontece)
         boolean tudoZero = true;
@@ -92,6 +88,8 @@ public class ULA {
         }
         if (tudoZero)
             D[1] = 1; //zero flag
+        else
+            D[1] = 0;
     }
 
     public void setA(int[] a) {
