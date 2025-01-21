@@ -18,8 +18,10 @@ import visao.WindowData;
 
 public class UnidadeControle extends Thread{
 	
+	private GetRegistrador gr;
 	private int sleepInMillis = 1000;
 	private boolean stop = false;
+	public MemoriaPrincipal memoriaPrincipal = new MemoriaPrincipal();
 	@Override
 	public void run() {
 		MicroprogramCounter mpc = new MicroprogramCounter();
@@ -27,7 +29,6 @@ public class UnidadeControle extends Thread{
 		MicroinstructionRegister mir = new MicroinstructionRegister();
 		IncrementMicroprogramCounter impc = new IncrementMicroprogramCounter(mpc);
 		ControladorDeFluxo cdf = new ControladorDeFluxo();
-		MemoriaPrincipal memoriaPrincipal = new MemoriaPrincipal();
 		MMux mmux = new MMux();
 		AMux amux = new AMux();
 		ULA ula = new ULA();
@@ -35,7 +36,7 @@ public class UnidadeControle extends Thread{
 		MemoryBufferRegisterRead mbrRead = new MemoryBufferRegisterRead(memoriaPrincipal);
 		MemoryBufferRegisterWrite mbrWrite = new MemoryBufferRegisterWrite(memoriaPrincipal);
 		MemoryAdressRegister mar = new MemoryAdressRegister(memoriaPrincipal);
-		GetRegistrador gr = new GetRegistrador();
+		gr = new GetRegistrador();
 		Integer[] zeroValue = new Integer[32];
 		for (int i = 0; i < 32; i++) {
 			zeroValue[i] = 0;
@@ -62,6 +63,8 @@ public class UnidadeControle extends Thread{
 
 				mir.set(mc.getValueAtMPCAddress());
 				WindowData.microAtual = Other.microInstructionsAsStrings[Conversoes.binaryIntToDecimal(mpc.getValue())];
+				sleep(sleepInMillis); // Feito para desacelerar a execução e permitir a visualização após cada subciclo 
+				updateRegisterExibitionValue();
 				// fim subciclo 1
 
 				// Subciclo 2 ------------------------------
@@ -73,7 +76,8 @@ public class UnidadeControle extends Thread{
 
 				amux.setControle(mir.getSlice(0,0).stream().mapToInt(Integer::intValue).toArray());
 				amux.setEntradas(Arrays.stream(latchA).boxed().toArray(Integer[]::new), Arrays.stream(mbrRead.getRegistrador()).boxed().toArray(Integer[]::new));
-
+				sleep(sleepInMillis);
+				updateRegisterExibitionValue();
 				//			if (mir.getPieceAs32bit(0, 0).get(31) == 1) {
 //				mbrRead.read();
 //				latchA = mbrRead.getRegistrador();
@@ -97,7 +101,8 @@ public class UnidadeControle extends Thread{
 				desclocador.setDesl_mir(mir.getSlice(5,6).stream().mapToInt(Integer::intValue).toArray());
 
 				desclocador.perform();
-
+				sleep(sleepInMillis);
+				updateRegisterExibitionValue();
 //			// Subciclo 4 ------------------------------
 				WindowData.currentSub = "4";
 
@@ -224,7 +229,7 @@ public class UnidadeControle extends Thread{
 				//
 				//				// fim subciclo 4 ------------------------------
 
-				
+				updateRegisterExibitionValue();
 				sleep(sleepInMillis);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -233,6 +238,19 @@ public class UnidadeControle extends Thread{
 			i++;	
 		}
 		
+	}
+	
+	private void updateRegisterExibitionValue(){
+		WindowData.ac = Conversoes.bitArrayToC2(gr.get(1).getRegistrador());
+		WindowData.sp = Conversoes.bitArrayToC2(gr.get(2).getRegistrador());
+		WindowData.ir = Conversoes.bitArrayToC2(gr.get(3).getRegistrador());
+		WindowData.tir = Conversoes.bitArrayToC2(gr.get(4).getRegistrador());
+		WindowData.a = Conversoes.bitArrayToC2(gr.get(5).getRegistrador());
+		WindowData.b = Conversoes.bitArrayToC2(gr.get(6).getRegistrador());
+		WindowData.c = Conversoes.bitArrayToC2(gr.get(7).getRegistrador());
+		WindowData.d = Conversoes.bitArrayToC2(gr.get(8).getRegistrador());
+		WindowData.e = Conversoes.bitArrayToC2(gr.get(9).getRegistrador());
+		WindowData.f = Conversoes.bitArrayToC2(gr.get(10).getRegistrador());
 	}
 	
 	public int getSleepInMillis() {

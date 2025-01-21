@@ -28,29 +28,36 @@ public class Conversoes {
 		}
 		return converted;
 
-//		String sequence = "";
-//
-//		while(decimal != 0) {
-//			sequence += decimal % 2;
-//			decimal = decimal/2;
-//		}
-//
-//		while(sequence.length()<32) {
-//			sequence = '0'+sequence;
-//		}
-//
-//		ArrayList<Integer> converted = new ArrayList<>(32);
-//		for(int i = 0; i<32; i++) {
-//			converted.add(Integer.parseInt(String.valueOf(sequence.charAt(i))));
-//		}
-//		return converted;
 	}
 	
-	/*public static Integer[] completeArray(Integer[] array) {
-		Integer
-	}*/
 
 	public static int binaryIntToDecimal(int[] binaryAddress) {
 		return Integer.parseInt(Arrays.toString(binaryAddress).replaceAll("[\\[,\\s\\]]", ""),2);
+	}
+	
+	public static String bitArrayToC2(int[] data) {
+		int sum = 0;
+		int len = data.length-1;
+		sum -= data[0]*(Math.pow(2, len));
+		for(int i = 1; i<len; i++) {
+			sum += data[i]*(Math.pow(2, len-i));
+		}
+		return String.valueOf(sum);
+	}
+	
+	public static Integer[] stringToIntegerArray(String array) {
+		Integer[] retorno = new Integer[array.length()];
+		for(int i = 0; i<array.length();i++) {
+			retorno[i] = Integer.parseInt(String.valueOf(array.charAt(i)));
+		}
+		return retorno;
+	}
+	
+	public static String integerArrayToString(Integer[] array) {
+		String retorno = "";
+		for(int i = 0; i<array.length; i++) {
+			retorno += array[i];
+		}
+		return retorno;
 	}
 }
