@@ -243,8 +243,8 @@ public class UnidadeControle extends Thread{
 	private void updateRegisterExibitionValue(){
 		WindowData.ac = Conversoes.bitArrayToC2(gr.get(1).getRegistrador());
 		WindowData.sp = Conversoes.bitArrayToC2(gr.get(2).getRegistrador());
-		WindowData.ir = Conversoes.bitArrayToC2(gr.get(3).getRegistrador());
-		WindowData.tir = Conversoes.bitArrayToC2(gr.get(4).getRegistrador());
+		WindowData.ir = Conversoes.intArrayToString(gr.get(3).getRegistrador());
+		WindowData.tir = Conversoes.intArrayToString(gr.get(4).getRegistrador());
 		WindowData.a = Conversoes.bitArrayToC2(gr.get(5).getRegistrador());
 		WindowData.b = Conversoes.bitArrayToC2(gr.get(6).getRegistrador());
 		WindowData.c = Conversoes.bitArrayToC2(gr.get(7).getRegistrador());

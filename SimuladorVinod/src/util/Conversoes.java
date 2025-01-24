@@ -34,6 +34,9 @@ public class Conversoes {
 	public static int binaryIntToDecimal(int[] binaryAddress) {
 		return Integer.parseInt(Arrays.toString(binaryAddress).replaceAll("[\\[,\\s\\]]", ""),2);
 	}
+	public static int binaryIntToDecimal(Integer[] binaryAddress) {
+		return Integer.parseInt(Arrays.toString(binaryAddress).replaceAll("[\\[,\\s\\]]", ""),2);
+	}
 	
 	public static String bitArrayToC2(int[] data) {
 		int sum = 0;
@@ -54,6 +57,13 @@ public class Conversoes {
 	}
 	
 	public static String integerArrayToString(Integer[] array) {
+		String retorno = "";
+		for(int i = 0; i<array.length; i++) {
+			retorno += array[i];
+		}
+		return retorno;
+	}
+	public static String intArrayToString(int[] array) {
 		String retorno = "";
 		for(int i = 0; i<array.length; i++) {
 			retorno += array[i];

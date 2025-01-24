@@ -25,7 +25,7 @@ public class MainWindow {
 	private JSpinner spinner;
 	private JButton btnAplicar;
 	private String[] title = new String[] {"Registrador", "Valor"};
-	private String[] titlemp = new String[] {"Endereço", "Valor (binário)"};
+	private String[] titlemp = new String[] {"Endereço", "Valor (binário)", "Valor (decimal)"};
 	private DefaultTableModel dtm = new DefaultTableModel(new String[0][2], title);
 	private DefaultTableModel dtmmp = new DefaultTableModel(new String[0][2], titlemp);
 	JTable tableProdutos;
@@ -85,28 +85,22 @@ public class MainWindow {
 		uc = new UnidadeControle();
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 640, 480);
+		frame.setBounds(100, 100, 640, 480 + 95);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		txtCode = new JTextArea();
-		txtCode.setWrapStyleWord(true);
-		txtCode.setLineWrap(true);
-		txtCode.setBounds(10, 40, 304, 184);
-		frame.getContentPane().add(txtCode);
 		
 		spinner = new JSpinner();
 		spinner.setBounds(10, 260, 52, 20);
 		frame.getContentPane().add(spinner);
 		
-		JLabel lblNewLabel = new JLabel("Pausa entre subciclos (em segundos):");
+		JLabel lblNewLabel = new JLabel("Pausa entre subciclos (em milissegundos):");
 		lblNewLabel.setBounds(10, 235, 218, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
 		btnAplicar = new JButton("Aplicar");
 		btnAplicar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int segundos = Integer.parseInt(spinner.getValue().toString())*1000;
+				int segundos = Integer.parseInt(spinner.getValue().toString());
 				uc.setSleepInMillis(segundos);
 			}
 		});
@@ -177,7 +171,7 @@ public class MainWindow {
 		frame.getContentPane().add(btnAplicar_1);
 		
 		scrollMP = new JScrollPane();
-		scrollMP.setBounds(10, 325, 604, 105);
+		scrollMP.setBounds(10, 325, 604, 200);
 		tableMP = new JTable(dtmmp);
 		String[] data = new String[2];
 		for(int i = 0; i<4096; i++) {
@@ -187,6 +181,15 @@ public class MainWindow {
 		}
 		scrollMP.setViewportView(tableMP);
 		frame.getContentPane().add(scrollMP);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 40, 304, 184);
+		frame.getContentPane().add(scrollPane_1);
+		
+		txtCode = new JTextArea();
+		scrollPane_1.setViewportView(txtCode);
+		txtCode.setWrapStyleWord(true);
+		txtCode.setLineWrap(true);
 	}
 	
 	public void update() {
@@ -205,6 +208,7 @@ public class MainWindow {
 		
 		for(int i = 0; i<4096; i++) {
 			dtmmp.setValueAt(Conversoes.integerArrayToString(uc.memoriaPrincipal.get(i)), i, 1);
+			dtmmp.setValueAt(Conversoes.binaryIntToDecimal(uc.memoriaPrincipal.get(i)), i, 2);
 		}
 		
 	}
