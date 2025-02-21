@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.JLabel;
 import main.UnidadeControle;
 import util.Conversoes;
+import util.Montador;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -36,6 +37,8 @@ public class MainWindow {
 	private JButton btnAplicar_1;
 	private JScrollPane scrollMP;
 	private JTable tableMP;
+	private JScrollPane scrollAssembly;
+	private JTextArea txtAssembly;
 	
 	/**
 	 * Launch the application.
@@ -81,7 +84,7 @@ public class MainWindow {
 	private void initialize() {
 		
 		MainWindow currentJanela = this;
-		wu = new WindowUpdater(this);
+		wu = new WindowUpdater(this, 1000);
 		uc = new UnidadeControle();
 		
 		frame = new JFrame();
@@ -90,11 +93,11 @@ public class MainWindow {
 		frame.getContentPane().setLayout(null);
 		
 		spinner = new JSpinner();
-		spinner.setBounds(10, 260, 52, 20);
+		spinner.setBounds(96, 260, 52, 20);
 		frame.getContentPane().add(spinner);
 		
 		JLabel lblNewLabel = new JLabel("Pausa entre subciclos (em milissegundos):");
-		lblNewLabel.setBounds(10, 235, 218, 14);
+		lblNewLabel.setBounds(96, 235, 218, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
 		btnAplicar = new JButton("Aplicar");
@@ -102,14 +105,15 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				int segundos = Integer.parseInt(spinner.getValue().toString());
 				uc.setSleepInMillis(segundos);
+				wu.setSleep(segundos);
 			}
 		});
-		btnAplicar.setBounds(72, 259, 65, 23);
+		btnAplicar.setBounds(158, 259, 65, 23);
 		frame.getContentPane().add(btnAplicar);
 		
-		JLabel lblNewLabel_1 = new JLabel("Código (digite seu programa já compilado)");
+		JLabel lblNewLabel_1 = new JLabel("Compilado:");
 		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblNewLabel_1.setBounds(10, 11, 304, 26);
+		lblNewLabel_1.setBounds(171, 11, 143, 26);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Registradores");
@@ -167,7 +171,7 @@ public class MainWindow {
 				wu.start();
 			}
 		});
-		btnAplicar_1.setBounds(147, 259, 72, 23);
+		btnAplicar_1.setBounds(231, 291, 72, 23);
 		frame.getContentPane().add(btnAplicar_1);
 		
 		scrollMP = new JScrollPane();
@@ -183,13 +187,37 @@ public class MainWindow {
 		frame.getContentPane().add(scrollMP);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 40, 304, 184);
+		scrollPane_1.setBounds(171, 40, 143, 185);
 		frame.getContentPane().add(scrollPane_1);
 		
 		txtCode = new JTextArea();
 		scrollPane_1.setViewportView(txtCode);
 		txtCode.setWrapStyleWord(true);
 		txtCode.setLineWrap(true);
+		
+		scrollAssembly = new JScrollPane();
+		scrollAssembly.setBounds(10, 40, 153, 185);
+		frame.getContentPane().add(scrollAssembly);
+		
+		txtAssembly = new JTextArea();
+		txtAssembly.setWrapStyleWord(true);
+		txtAssembly.setLineWrap(true);
+		scrollAssembly.setViewportView(txtAssembly);
+		
+		JLabel lblNewLabel_1_3 = new JLabel("Assembly:");
+		lblNewLabel_1_3.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblNewLabel_1_3.setBounds(10, 11, 153, 26);
+		frame.getContentPane().add(lblNewLabel_1_3);
+		
+		JButton btnMontar = new JButton("Montar");
+		btnMontar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Montador montador = new Montador(txtAssembly.getText(), currentJanela);
+				montador.start();
+			}
+		});
+		btnMontar.setBounds(10, 259, 72, 23);
+		frame.getContentPane().add(btnMontar);
 	}
 	
 	public void update() {
@@ -211,5 +239,8 @@ public class MainWindow {
 			dtmmp.setValueAt(Conversoes.binaryIntToDecimal(uc.memoriaPrincipal.get(i)), i, 2);
 		}
 		
+	}
+	public void setTxtCode(String code) {
+		txtCode.setText(code);
 	}
 }
