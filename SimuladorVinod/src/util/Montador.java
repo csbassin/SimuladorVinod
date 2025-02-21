@@ -1,7 +1,7 @@
 package util;
 
 import java.util.HashMap;
-
+import java.util.ArrayList;
 import visao.MainWindow;
 
 public class Montador extends Thread{
@@ -9,6 +9,10 @@ public class Montador extends Thread{
 	MainWindow janela;
 	static final HashMap<String, String> instructions = new HashMap<>(23);
 	static final HashMap<String, Integer> operandSize = new HashMap<>(23);
+	HashMap<String, Integer> vars = new HashMap<>(); // vai guardar os nomes de variàves e respectivos endereços
+	HashMap<String, Integer> flags = new HashMap<>(); // vai guardar flags e respectivos endereços
+	ArrayList<Integer> firstIndexesOfEspaco = new ArrayList<>();
+	int currentVariableAddress = 0;
 	static {
 		instructions.put("LODD", "0000");
 		instructions.put("STOD", "0001");
@@ -65,15 +69,70 @@ public class Montador extends Thread{
 	@Override 
 	public void run() {
 		String[] linhas = code.split("\n");
-		String montado = "";
-		for(String linha:linhas) {
-			int firstIndexOfEspaco = linha.length(); //= linha.indexOf(' ');
-			for(int i = 0; i<linha.length(); i++) {
-				if(linha.charAt(i) == ' ') {
-					firstIndexOfEspaco = i;
+		currentVariableAddress = linhas.length+1;
+		// primeira passada, procura por flags
+		int i = 0;
+		for(String linha: linhas) {
+			int firstIndexOfColon = 0;
+			
+			for(int a = 0; a<linha.length(); a++) {
+				if(linha.charAt(a) == ':') {
+					firstIndexOfColon = a;
 					break;
 				}
 			}
+			if(firstIndexOfColon != 0) {
+				flags.put(linha.substring(0, firstIndexOfColon), i);
+				linha = linha.substring(firstIndexOfColon+1); //corta a flag
+			}
+			linhas[i] = linha;
+			i++;
+		}
+		// segunda passada, troca flags e variáveis por números
+		i = 0;
+		for(String linha:linhas) {
+			int firstIndexOfEspaco = linha.length(); //= linha.indexOf(' ');
+			for(int a = 0; a<linha.length(); a++) {
+				if(linha.charAt(a) == ' ') {
+					firstIndexOfEspaco = a;
+					break;
+				}
+			}
+			firstIndexesOfEspaco.add(firstIndexOfEspaco);
+			String instruction = linha.substring(0, firstIndexOfEspaco);
+			if(firstIndexOfEspaco != linha.length()) { // implica que tem argumento
+				String value = linha.substring(firstIndexOfEspaco+1);
+				// Se for um desvio, o tratamento é diferente
+				if(instruction.equals("JUMP") || instruction.equals("JPOS") || instruction.equals("JZER") || instruction.equals("JNEG") || instruction.equals("JNZE")) {
+					linha = linha.substring(0, firstIndexOfEspaco) + " " + flags.get(value);
+				}else {
+					 // pega o argumento
+					// trata o argumento
+					try {
+						int v2 = Integer.parseInt(value);
+						
+						// se for um número, ele não faz nada mesmo
+					}catch(Exception e) {
+						Integer addr = vars.get(value);
+						if(addr == null) {
+							vars.put(value, currentVariableAddress); //guarda a correspondência entre variável e endereço no HashMap
+							linha = linha.substring(0, firstIndexOfEspaco) + " "+currentVariableAddress;  //troca o nome pelo endereço da variável
+							currentVariableAddress+=1; // a próxima variável será gravada no endereço seguinte
+						}else {
+							linha = linha.substring(0, firstIndexOfEspaco) + " "+addr.toString(); // troca pelo endereço já registrado
+						}
+						
+					}
+				}
+			}
+			linhas[i] = linha;
+			i++;
+		}
+		String montado = "";
+		// terceira passada, monta a linha
+		i = 0;
+		for(String linha:linhas) {
+			int firstIndexOfEspaco = firstIndexesOfEspaco.get(i); // desde que eu peguei o índice, só alterei pra frente, então vale
 			String instructionAsText = linha.substring(0, firstIndexOfEspaco);
 			System.out.println(instructionAsText);
 			montado += instructions.get(instructionAsText);
@@ -82,6 +141,7 @@ public class Montador extends Thread{
 				montado += conversaoCompleta(Integer.parseInt(linha.substring(firstIndexOfEspaco+1, linha.length())), sizeOperando);
 			}
 			montado += "\n";
+			i++;
 		}
 		janela.setTxtCode(montado);
 	}
