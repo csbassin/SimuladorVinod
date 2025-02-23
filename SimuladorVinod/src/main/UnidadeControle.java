@@ -45,13 +45,11 @@ public class UnidadeControle extends Thread{
 		mpc.set(zeroValue);
 		int i = 0;
 		int contRead = 0, contWrite = 0;
-
+		long executionTime = 0;
 		while(!stop) {
+			long cycleStartTime = System.currentTimeMillis();
 			try {
-				//adicionar code da simulação aqui
-			/*
-			System.out.println(i);
-			WindowData.txtData = "loop "+i;*/
+				updateRegisterExibitionValue();
 
 				//Subciclo 1
 				WindowData.currentSub = "1";
@@ -111,52 +109,12 @@ public class UnidadeControle extends Thread{
 				}
 
 				if (mir.getSlice(11,11).get(0) == 1) { //ENC ligado muda algum registrador
-					gr.get(Conversoes.bitArrayToDecimal(mir.getPieceAs32bit(12, 15)))
-							.set(Arrays.stream(desclocador.getSaida())
-									.boxed()
-									.toArray(Integer[]::new));
-					switch(Conversoes.bitArrayToDecimal(mir.getPieceAs32bit(12, 15))){
-						case 0:
-							WindowData.pc = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(0).getRegistrador()));
-							break;
-						case 1:
-							WindowData.ac = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(1).getRegistrador()));
-							break;
-						case 2:
-							WindowData.sp = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(2).getRegistrador()));
-							break;
-						case 3:
-							WindowData.ir = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(3).getRegistrador()));
-							break;
-						case 4:
-							WindowData.tir = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(4).getRegistrador()));
-							break;					
-						case 10:
-							WindowData.a = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(10).getRegistrador()));
-							break;
-						case 11:
-							WindowData.b = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(11).getRegistrador()));
-							break;
-						case 12:
-							WindowData.c = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(12).getRegistrador()));
-							break;
-						case 13:
-							WindowData.d = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(13).getRegistrador()));
-							break;
-						case 14:
-							WindowData.e = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(14).getRegistrador()));
-							break;
-						case 15:
-							WindowData.f = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(15).getRegistrador()));
-							break;
-					}
+					gr.get(Conversoes.bitArrayToDecimal(mir.getPieceAs32bit(12, 15))).set(Arrays.stream(desclocador.getSaida()).boxed().toArray(Integer[]::new));
 				}
 
 
 				if (mir.getSlice(7,7).get(0) == 1){ //mbr ligado entao seta o que sera escrito
-					mbrWrite.set(Arrays.stream(desclocador.getSaida())
-							.boxed()
-							.toArray(Integer[]::new));
+					mbrWrite.set(Arrays.stream(desclocador.getSaida()).boxed().toArray(Integer[]::new));
 				}
 
 				if (mir.getSlice(9,9).get(0) == 1){ //rd apareceu
@@ -178,11 +136,15 @@ public class UnidadeControle extends Thread{
 
 				//				// fim subciclo 4 ------------------------------
 				
+				long pausedTime = System.currentTimeMillis();
 				while(pause) { // gambiarra feia pra adicionar pausa aqui
 					sleep(1000);
+					
 				}
-				updateRegisterExibitionValue();
+				long endOfPauseTime = System.currentTimeMillis()-pausedTime;
 				sleep(sleepInMillis);
+				executionTime += System.currentTimeMillis()-cycleStartTime-endOfPauseTime; // tempo do ciclo = tempo atual - tempo do inicio - tempo pausado
+				WindowData.executionTime = String.valueOf(executionTime); 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -193,16 +155,17 @@ public class UnidadeControle extends Thread{
 	}
 	
 	private void updateRegisterExibitionValue(){
+		WindowData.pc = Conversoes.bitArrayToC2(gr.get(0).getRegistrador());
 		WindowData.ac = Conversoes.bitArrayToC2(gr.get(1).getRegistrador());
 		WindowData.sp = Conversoes.bitArrayToC2(gr.get(2).getRegistrador());
 		WindowData.ir = Conversoes.intArrayToString(gr.get(3).getRegistrador());
 		WindowData.tir = Conversoes.intArrayToString(gr.get(4).getRegistrador());
-		WindowData.a = Conversoes.bitArrayToC2(gr.get(5).getRegistrador());
-		WindowData.b = Conversoes.bitArrayToC2(gr.get(6).getRegistrador());
-		WindowData.c = Conversoes.bitArrayToC2(gr.get(7).getRegistrador());
-		WindowData.d = Conversoes.bitArrayToC2(gr.get(8).getRegistrador());
-		WindowData.e = Conversoes.bitArrayToC2(gr.get(9).getRegistrador());
-		WindowData.f = Conversoes.bitArrayToC2(gr.get(10).getRegistrador());
+		WindowData.a = Conversoes.bitArrayToC2(gr.get(10).getRegistrador());
+		WindowData.b = Conversoes.bitArrayToC2(gr.get(11).getRegistrador());
+		WindowData.c = Conversoes.bitArrayToC2(gr.get(12).getRegistrador());
+		WindowData.d = Conversoes.bitArrayToC2(gr.get(13).getRegistrador());
+		WindowData.e = Conversoes.bitArrayToC2(gr.get(14).getRegistrador());
+		WindowData.f = Conversoes.bitArrayToC2(gr.get(15).getRegistrador());
 	}
 	
 	public int getSleepInMillis() {
@@ -218,6 +181,22 @@ public class UnidadeControle extends Thread{
 	
 	public boolean isPause() {
 		return pause;
+	}
+	
+	public GetRegistrador getGr() {
+		return gr;
+	}
+
+	public void setGr(GetRegistrador gr) {
+		this.gr = gr;
+	}
+
+	public MemoriaPrincipal getMemoriaPrincipal() {
+		return memoriaPrincipal;
+	}
+
+	public void setMemoriaPrincipal(MemoriaPrincipal memoriaPrincipal) {
+		this.memoriaPrincipal = memoriaPrincipal;
 	}
 
 	public boolean isStop() {

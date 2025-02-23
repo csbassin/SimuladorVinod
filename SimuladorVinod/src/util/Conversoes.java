@@ -7,7 +7,7 @@ public class Conversoes {
 	
 	public static int bitArrayToDecimal(ArrayList<Integer> data) {
 		while(data.size()<32) {
-			data.addFirst(0);
+			data.add(0, 0);
 		}
 		int sum = 0;
 		for(int i = 31; i>-1; i--) {
@@ -30,7 +30,44 @@ public class Conversoes {
 
 	}
 	
-
+	public static String conversaoCompleta(int operando, int size) {
+		String binario = Integer.toBinaryString(Math.abs(operando));
+		while(binario.length()<size) {
+			binario = "0"+binario;
+		}
+		// acerta o sinal, fazendo a conversão para c2
+		if(operando<0) {
+			String inverso = "";
+			// inverte
+			for(int i = binario.length()-1; i>=0; i--) {
+				if(binario.charAt(i) == '0') {
+					inverso += '1';
+				}else {
+					inverso += '0';
+				}
+			}
+			// soma 1
+			char carry = '1';
+			int i = inverso.length()-1;
+			binario = ""; // limpa binario para aproveitar a String
+			while(i >= 0) {
+				if(carry == '1') {
+					if(inverso.charAt(i) == '0') {
+						binario += '1';
+						carry = '0';
+					}else {
+						binario += '0';
+					}
+				}else {
+					binario += inverso.charAt(i);
+				}
+				
+				i--;
+			}
+		}
+		return binario;
+	}
+	
 	public static int binaryIntToDecimal(int[] binaryAddress) {
 		return Integer.parseInt(Arrays.toString(binaryAddress).replaceAll("[\\[,\\s\\]]", ""),2);
 	}
@@ -42,12 +79,20 @@ public class Conversoes {
 		int sum = 0;
 		int len = data.length-1;
 		sum -= data[0]*(Math.pow(2, len));
-		for(int i = 1; i<len; i++) {
+		for(int i = 1; i<len+1; i++) {
 			sum += data[i]*(Math.pow(2, len-i));
 		}
 		return String.valueOf(sum);
 	}
-	
+	public static String bitArrayToC2(Integer[] data) {
+		int sum = 0;
+		int len = data.length-1;
+		sum -= data[0]*(Math.pow(2, len));
+		for(int i = 1; i<len+1; i++) {
+			sum += data[i]*(Math.pow(2, len-i));
+		}
+		return String.valueOf(sum);
+	}
 	public static Integer[] stringToIntegerArray(String array) {
 		Integer[] retorno = new Integer[array.length()];
 		for(int i = 0; i<array.length();i++) {

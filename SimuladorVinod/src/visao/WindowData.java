@@ -14,4 +14,5 @@ public class WindowData {
 	public static String f = "";
 	public static String currentSub = "";
 	public static String microAtual = "";
+	public static String executionTime = "";
 }

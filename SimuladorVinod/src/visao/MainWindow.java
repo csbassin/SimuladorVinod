@@ -40,6 +40,8 @@ public class MainWindow {
 	private JScrollPane scrollAssembly;
 	private JTextArea txtAssembly;
 	private JButton btnPause;
+	private JButton btnAplicar_1_1;
+	private JLabel lblTempo;
 	
 	/**
 	 * Launch the application.
@@ -88,9 +90,10 @@ public class MainWindow {
 		uc = new UnidadeControle();
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 640, 480 + 95);
+		frame.setBounds(100, 100, 640, 640);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setTitle("Simulador MIC-1 - Por Cauã Bassin, Lucas Avelar, Bernardo Rebello, Vitor Lemos e Allan Gaetani");
 		
 		spinner = new JSpinner();
 		spinner.setBounds(96, 260, 52, 20);
@@ -161,7 +164,7 @@ public class MainWindow {
 
 			}
 		});
-		btnGravarCdigoNa.setBounds(10, 291, 212, 23);
+		btnGravarCdigoNa.setBounds(10, 290, 212, 23);
 		frame.getContentPane().add(btnGravarCdigoNa);
 		
 		btnAplicar_1 = new JButton("Iniciar");
@@ -171,11 +174,11 @@ public class MainWindow {
 				wu.start();
 			}
 		});
-		btnAplicar_1.setBounds(231, 291, 72, 23);
+		btnAplicar_1.setBounds(231, 290, 72, 23);
 		frame.getContentPane().add(btnAplicar_1);
 		
 		scrollMP = new JScrollPane();
-		scrollMP.setBounds(10, 325, 604, 200);
+		scrollMP.setBounds(10, 323, 604, 236);
 		tableMP = new JTable(dtmmp);
 		String[] data = new String[2];
 		for(int i = 0; i<4096; i++) {
@@ -233,6 +236,20 @@ public class MainWindow {
 		});
 		btnPause.setBounds(232, 259, 72, 23);
 		frame.getContentPane().add(btnPause);
+		
+		btnAplicar_1_1 = new JButton("Editar Valores");
+		btnAplicar_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new PokeMenu(uc);
+			}
+		});
+		btnAplicar_1_1.setBounds(485, 570, 129, 23);
+		frame.getContentPane().add(btnAplicar_1_1);
+		
+		lblTempo = new JLabel("Tempo de Execução: 0ms");
+		lblTempo.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblTempo.setBounds(10, 569, 372, 24);
+		frame.getContentPane().add(lblTempo);
 	}
 	
 	public void update() {
@@ -248,7 +265,7 @@ public class MainWindow {
 		dtm.setValueAt(WindowData.e, 9, 1);
 		dtm.setValueAt(WindowData.f, 10, 1);
 		txtMicro.setText("Subciclo atual: "+WindowData.currentSub+"\nMicroinstrução atual: "+WindowData.microAtual);
-		
+		lblTempo.setText("Tempo de execução: "+WindowData.executionTime+"ms");
 		for(int i = 0; i<4096; i++) {
 			dtmmp.setValueAt(Conversoes.integerArrayToString(uc.memoriaPrincipal.get(i)), i, 1);
 			dtmmp.setValueAt(Conversoes.binaryIntToDecimal(uc.memoriaPrincipal.get(i)), i, 2);

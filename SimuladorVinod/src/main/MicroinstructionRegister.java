@@ -18,7 +18,7 @@ public class MicroinstructionRegister extends Registrador{
 			list.add(this.registrador[i]);
 		}
 		while(list.size()<32) {
-			list.addFirst(0);
+			list.add(0, 0);
 		}
 		return list;
 	}
