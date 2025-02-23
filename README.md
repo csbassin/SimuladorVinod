@@ -5,12 +5,13 @@ Features:
 The simulator, as of now, includes:
   1- Interface that allows the visualization of the currently running program, system memory, registers, current microinstruction and subcycle;
   2- Simulation pause;
-  3- Integrated assembler, allowing you to paste assembly code directly into the simulator and run it.
+  3- Integrated assembler, allowing you to paste assembly code directly into the simulator and run it;
+  4- Exibition of the execution time, updated after each cycle. (Not on the release yet, only in the most recent commits)
 To use the assembler without problems, you should follow the syntax we specified:
   Flags (labels) should be declared befor the line, with only ":" separating it from the instruction;
   Variable and label names should have at least one character that is not a number;
   Don't put spaces after of before the lines;
-  Separate variables and label usages fro the instruction with one (and only one) space;
+  Separate variables and label usages from the instruction with one (and only one) space;
   Don't put commentaries, as they are not supported yet.
 Example code:
   START:LOCO 16
