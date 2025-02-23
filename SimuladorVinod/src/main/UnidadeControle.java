@@ -21,6 +21,7 @@ public class UnidadeControle extends Thread{
 	private GetRegistrador gr;
 	private int sleepInMillis = 1000;
 	private boolean stop = false;
+	private boolean pause = false;
 	public MemoriaPrincipal memoriaPrincipal = new MemoriaPrincipal();
 	@Override
 	public void run() {
@@ -64,7 +65,7 @@ public class UnidadeControle extends Thread{
 				mir.set(mc.getValueAtMPCAddress());
 				WindowData.microAtual = Other.microInstructionsAsStrings[Conversoes.binaryIntToDecimal(mpc.getValue())];
 				sleep(sleepInMillis); // Feito para desacelerar a execução e permitir a visualização após cada subciclo 
-				updateRegisterExibitionValue();
+				
 				// fim subciclo 1
 
 				// Subciclo 2 ------------------------------
@@ -77,11 +78,8 @@ public class UnidadeControle extends Thread{
 				amux.setControle(mir.getSlice(0,0).stream().mapToInt(Integer::intValue).toArray());
 				amux.setEntradas(Arrays.stream(latchA).boxed().toArray(Integer[]::new), Arrays.stream(mbrRead.getRegistrador()).boxed().toArray(Integer[]::new));
 				sleep(sleepInMillis);
-				updateRegisterExibitionValue();
-				//			if (mir.getPieceAs32bit(0, 0).get(31) == 1) {
-//				mbrRead.read();
-//				latchA = mbrRead.getRegistrador();
-//			}
+				
+
 				// fim subciclo 2 ------------------------------
 
 				// Subciclo 3 ------------------------------
@@ -102,17 +100,17 @@ public class UnidadeControle extends Thread{
 
 				desclocador.perform();
 				sleep(sleepInMillis);
-				updateRegisterExibitionValue();
-//			// Subciclo 4 ------------------------------
+				
+				// Subciclo 4 ------------------------------
 				WindowData.currentSub = "4";
 
 
-				if (mir.getSlice(8,8).getFirst() == 1) { //mudar valor do MAR
+				if (mir.getSlice(8,8).get(0) == 1) { //mudar valor do MAR
 					mar.set(Arrays.stream(latchB).boxed().toArray(Integer[]::new));
 					mar.definirEndereco();
 				}
 
-				if (mir.getSlice(11,11).getFirst() == 1) { //ENC ligado muda algum registrador
+				if (mir.getSlice(11,11).get(0) == 1) { //ENC ligado muda algum registrador
 					gr.get(Conversoes.bitArrayToDecimal(mir.getPieceAs32bit(12, 15)))
 							.set(Arrays.stream(desclocador.getSaida())
 									.boxed()
@@ -132,22 +130,7 @@ public class UnidadeControle extends Thread{
 							break;
 						case 4:
 							WindowData.tir = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(4).getRegistrador()));
-							break;
-//					case 5:
-//						WindowData.0 = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(5).getRegistrador()));
-//						break;
-//					case 6:
-//						WindowData.+1 = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(6).getRegistrador()));
-//						break;
-//					case 7:
-//						WindowData.-1 = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(7).getRegistrador()));
-//						break;
-//					case 8:
-//						WindowData.Amask = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(8).getRegistrador()));
-//						break;
-//					case 9:
-//						WindowData.Smask = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(9).getRegistrador()));
-//						break;
+							break;					
 						case 10:
 							WindowData.a = Integer.toString(Conversoes.binaryIntToDecimal(gr.get(10).getRegistrador()));
 							break;
@@ -170,24 +153,22 @@ public class UnidadeControle extends Thread{
 				}
 
 
-				if (mir.getSlice(7,7).getFirst() == 1){ //mbr ligado entao seta o que sera escrito
+				if (mir.getSlice(7,7).get(0) == 1){ //mbr ligado entao seta o que sera escrito
 					mbrWrite.set(Arrays.stream(desclocador.getSaida())
 							.boxed()
 							.toArray(Integer[]::new));
 				}
 
-				if (mir.getSlice(9,9).getFirst() == 1){ //rd apareceu
+				if (mir.getSlice(9,9).get(0) == 1){ //rd apareceu
 					contRead++;
 					if (contRead == 2){
 						contRead = 0;
 						mbrRead.read();
 					}
-					//MBR é o indice 7
-					//rd é o 9
-					//wr é o 10
+					
 				}
 
-				if (mir.getSlice(10,10).getFirst() == 1){ // wr apareceu
+				if (mir.getSlice(10,10).get(0) == 1){ // wr apareceu
 					contWrite++;
 					if (contWrite == 2){
 						contWrite = 0;
@@ -195,40 +176,11 @@ public class UnidadeControle extends Thread{
 					}
 				}
 
-
-
-				//				//Determinando os valores de entrada do ULA
-				//           	 	int valorA = mir.isAMuxEnabled() ? mbr.getValue() : latchA.getValue();
-				//            	int valorB = latchB.getValue();
-				//
-				//				//Executando a operação da ULA
-				//            	ula.setA();
-				//            	int resultadoULA = ula.operar(valorA, valorB, mir.getULAOperation());
-				//
-				//				// O resultado da ULA passa pelo deslocador
-				//            	int resultadoFinal = deslocador.deslocar(resultadoULA, mir.getShiftType());
-				//
-				//				//Se a microinstrução pedir, gravamos o valor do latch B no registrador de endereço (MAR)
-				//				if (mir.isMARWriteEnabled()) {
-				//                	mar.setValue(latchB.getValue());
-				//            	}
-				//
-				//				// fim subciclo 3 ------------------------------
-				//
-				//				// Subciclo 4 ------------------------------
-				//
-				//				//Se a microinstrução habilitar o MBR, gravamos o resultado la
-				//           	 	if (mir.isMBREnabled()) {
-				//                	mbr.setValue(resultadoFinal);
-				//            	}
-				//
-				//				//Gravar o resultado no registrador especificado(Se a microinstrução permitir, claro)
-				//            	if (mir.isEnCEnabled()) {
-				//                	registradores.set(mir.getBarC(), resultadoFinal);
-				//            	}
-				//
 				//				// fim subciclo 4 ------------------------------
-
+				
+				while(pause) { // gambiarra feia pra adicionar pausa aqui
+					sleep(1000);
+				}
 				updateRegisterExibitionValue();
 				sleep(sleepInMillis);
 			} catch (InterruptedException e) {
@@ -259,6 +211,15 @@ public class UnidadeControle extends Thread{
 	public void setSleepInMillis(int sleepInMillis) {
 		this.sleepInMillis = sleepInMillis;
 	}
+	
+	public void setPause(boolean pause) {
+		this.pause = pause;
+	}
+	
+	public boolean isPause() {
+		return pause;
+	}
+
 	public boolean isStop() {
 		return stop;
 	}

@@ -4,6 +4,7 @@ public class WindowUpdater extends Thread{
 	
 	private MainWindow mw;
 	int sleep;
+	private boolean pause;
 	
 	public WindowUpdater(MainWindow mw, int sleep) {
 		this.mw = mw;
@@ -17,13 +18,26 @@ public class WindowUpdater extends Thread{
 	@Override
 	public void run() {
 		while(true) {
-			mw.update();
 			try {
+				while(pause) {
+					sleep(1000);
+				}
+				mw.update();
 				sleep(sleep);
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		
 	}
+
+	public boolean isPause() {
+		return pause;
+	}
+
+	public void setPause(boolean pause) {
+		this.pause = pause;
+	}
+	
 }

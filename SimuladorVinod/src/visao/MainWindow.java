@@ -39,6 +39,7 @@ public class MainWindow {
 	private JTable tableMP;
 	private JScrollPane scrollAssembly;
 	private JTextArea txtAssembly;
+	private JButton btnPause;
 	
 	/**
 	 * Launch the application.
@@ -82,7 +83,6 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
 		MainWindow currentJanela = this;
 		wu = new WindowUpdater(this, 1000);
 		uc = new UnidadeControle();
@@ -105,7 +105,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				int segundos = Integer.parseInt(spinner.getValue().toString());
 				uc.setSleepInMillis(segundos);
-				wu.setSleep(segundos);
+				wu.setSleep(segundos/2);
 			}
 		});
 		btnAplicar.setBounds(158, 259, 65, 23);
@@ -113,7 +113,7 @@ public class MainWindow {
 		
 		JLabel lblNewLabel_1 = new JLabel("Compilado:");
 		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblNewLabel_1.setBounds(171, 11, 143, 26);
+		lblNewLabel_1.setBounds(161, 11, 143, 26);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Registradores");
@@ -187,7 +187,7 @@ public class MainWindow {
 		frame.getContentPane().add(scrollMP);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(171, 40, 143, 185);
+		scrollPane_1.setBounds(161, 40, 153, 185);
 		frame.getContentPane().add(scrollPane_1);
 		
 		txtCode = new JTextArea();
@@ -196,7 +196,7 @@ public class MainWindow {
 		txtCode.setLineWrap(true);
 		
 		scrollAssembly = new JScrollPane();
-		scrollAssembly.setBounds(10, 40, 153, 185);
+		scrollAssembly.setBounds(10, 40, 143, 185);
 		frame.getContentPane().add(scrollAssembly);
 		
 		txtAssembly = new JTextArea();
@@ -218,6 +218,21 @@ public class MainWindow {
 		});
 		btnMontar.setBounds(10, 259, 72, 23);
 		frame.getContentPane().add(btnMontar);
+		
+		btnPause = new JButton("Pausar");
+		btnPause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(uc.isPause()) {
+					uc.setPause(false);
+					wu.setPause(false);
+				}else {
+					uc.setPause(true);
+					wu.setPause(true);
+				}
+			}
+		});
+		btnPause.setBounds(232, 259, 72, 23);
+		frame.getContentPane().add(btnPause);
 	}
 	
 	public void update() {

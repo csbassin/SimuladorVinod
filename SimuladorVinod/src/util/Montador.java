@@ -103,7 +103,7 @@ public class Montador extends Thread{
 			if(firstIndexOfEspaco != linha.length()) { // implica que tem argumento
 				String value = linha.substring(firstIndexOfEspaco+1);
 				// Se for um desvio, o tratamento é diferente
-				if(instruction.equals("JUMP") || instruction.equals("JPOS") || instruction.equals("JZER") || instruction.equals("JNEG") || instruction.equals("JNZE")) {
+				if(instruction.equals("JUMP") || instruction.equals("JPOS") || instruction.equals("JZER") || instruction.equals("JNEG") || instruction.equals("JNZE") ||instruction.equals("CALL")) {
 					linha = linha.substring(0, firstIndexOfEspaco) + " " + flags.get(value);
 				}else {
 					 // pega o argumento
