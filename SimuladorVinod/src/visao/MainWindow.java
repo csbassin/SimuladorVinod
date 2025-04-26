@@ -42,6 +42,7 @@ public class MainWindow {
 	private JButton btnPause;
 	private JButton btnAplicar_1_1;
 	private JLabel lblTempo;
+	private JSpinner spnPausaPC;
 	
 	/**
 	 * Launch the application.
@@ -90,7 +91,7 @@ public class MainWindow {
 		uc = new UnidadeControle();
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 640, 640);
+		frame.setBounds(100, 100, 640, 673);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Simulador MIC-1 - Por Cauã Bassin, Lucas Avelar, Bernardo Rebello, Vitor Lemos e Allan Gaetani");
@@ -250,6 +251,24 @@ public class MainWindow {
 		lblTempo.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		lblTempo.setBounds(10, 569, 372, 24);
 		frame.getContentPane().add(lblTempo);
+		
+		JLabel lblNewLabel_1_2_1 = new JLabel("Pausar automaticamente quando PC:");
+		lblNewLabel_1_2_1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblNewLabel_1_2_1.setBounds(10, 598, 264, 26);
+		frame.getContentPane().add(lblNewLabel_1_2_1);
+		
+		spnPausaPC = new JSpinner();
+		spnPausaPC.setBounds(284, 603, 177, 20);
+		frame.getContentPane().add(spnPausaPC);
+		
+		JButton btnAplicar_1_1_1 = new JButton("Aplicar");
+		btnAplicar_1_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				uc.setPcValueForPause(Integer.parseInt(spnPausaPC.getValue().toString()));
+			}
+		});
+		btnAplicar_1_1_1.setBounds(485, 603, 129, 23);
+		frame.getContentPane().add(btnAplicar_1_1_1);
 	}
 	
 	public void update() {

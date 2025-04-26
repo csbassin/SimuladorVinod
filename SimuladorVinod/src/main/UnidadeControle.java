@@ -23,6 +23,8 @@ public class UnidadeControle extends Thread{
 	private boolean stop = false;
 	private boolean pause = false;
 	public MemoriaPrincipal memoriaPrincipal = new MemoriaPrincipal();
+	private int[] pcValueForPause = null;
+	private boolean pausaAutomaticaJaPassou = false;
 	@Override
 	public void run() {
 		MicroprogramCounter mpc = new MicroprogramCounter();
@@ -136,6 +138,21 @@ public class UnidadeControle extends Thread{
 
 				//				// fim subciclo 4 ------------------------------
 				
+				if(pcValueForPause!=null && pausaAutomaticaJaPassou == false) {
+					boolean igual = true;
+					int a = 0;
+					while(igual == true && a<pcValueForPause.length) {
+						if(pcValueForPause[a] != gr.get(0).getRegistrador()[a]) {
+							igual = false;
+						}
+						a++;
+					}
+					if(igual) {
+						pause = true;
+						pausaAutomaticaJaPassou = true;
+					}
+				}
+				
 				long pausedTime = System.currentTimeMillis();
 				while(pause) { // gambiarra feia pra adicionar pausa aqui
 					sleep(1000);
@@ -205,4 +222,15 @@ public class UnidadeControle extends Thread{
 	public void setStop(boolean stop) {
 		this.stop = stop;
 	}
+
+	public int[] getPcValueForPause() {
+		return pcValueForPause;
+	}
+
+	//tá feio, mas vale, tô com preguiça
+	public void setPcValueForPause(int value) {
+		pausaAutomaticaJaPassou = false;
+		this.pcValueForPause = Conversoes.integerArrayToIntArray(Conversoes.stringToIntegerArray(Conversoes.conversaoCompleta(value, 16)));
+	}
+	
 }

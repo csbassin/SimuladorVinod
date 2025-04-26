@@ -115,4 +115,18 @@ public class Conversoes {
 		}
 		return retorno;
 	}
+	public static Integer[] intArrayToIntegerArray(int[] array) {
+		Integer[] retorno = new Integer[array.length];
+		for(int i = 0; i<retorno.length; i++) {
+			retorno[i] = array[i];
+		}
+		return retorno;
+	}
+	public static int[] integerArrayToIntArray(Integer[] array) {
+		int[] retorno = new int[array.length];
+		for(int i = 0; i<retorno.length; i++) {
+			retorno[i] = array[i];
+		}
+		return retorno;
+	}
 }
