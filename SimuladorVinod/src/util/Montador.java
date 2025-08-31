@@ -69,10 +69,20 @@ public class Montador extends Thread{
 	@Override 
 	public void run() {
 		String[] linhas = code.split("\n");
-		currentVariableAddress = linhas.length+1;
+		ArrayList<String> tratado = new ArrayList<>(linhas.length);
+		// primeira primeira passada: Remove espaços no início e no fim e remove comentários. Tá feio mas tá mais fácil
+		for(String linha:linhas) {
+			if(!(linha.startsWith("/"))) {
+				if(linha.startsWith(" ")) {
+					linha = linha.trim();
+				}
+				tratado.add(linha);
+			}
+		}
+		currentVariableAddress = tratado.size();
 		// primeira passada, procura por flags
 		int i = 0;
-		for(String linha: linhas) {
+		for(String linha: tratado) {
 			int firstIndexOfColon = 0;
 			
 			for(int a = 0; a<linha.length(); a++) {
@@ -85,12 +95,12 @@ public class Montador extends Thread{
 				flags.put(linha.substring(0, firstIndexOfColon), i);
 				linha = linha.substring(firstIndexOfColon+1); //corta a flag
 			}
-			linhas[i] = linha;
+			tratado.set(i, linha);
 			i++;
 		}
 		// segunda passada, troca flags e variáveis por números
 		i = 0;
-		for(String linha:linhas) {
+		for(String linha:tratado) {
 			int firstIndexOfEspaco = linha.length(); //= linha.indexOf(' ');
 			for(int a = 0; a<linha.length(); a++) {
 				if(linha.charAt(a) == ' ') {
@@ -125,13 +135,13 @@ public class Montador extends Thread{
 					}
 				}
 			}
-			linhas[i] = linha;
+			tratado.set(i, linha);
 			i++;
 		}
 		String montado = "";
 		// terceira passada, monta a linha
 		i = 0;
-		for(String linha:linhas) {
+		for(String linha:tratado) {
 			int firstIndexOfEspaco = firstIndexesOfEspaco.get(i); // desde que eu peguei o índice, só alterei pra frente, então vale
 			String instructionAsText = linha.substring(0, firstIndexOfEspaco);
 			System.out.println(instructionAsText);
