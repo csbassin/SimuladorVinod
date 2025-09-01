@@ -142,15 +142,17 @@ public class Montador extends Thread{
 		// terceira passada, monta a linha
 		i = 0;
 		for(String linha:tratado) {
-			int firstIndexOfEspaco = firstIndexesOfEspaco.get(i); // desde que eu peguei o índice, só alterei pra frente, então vale
-			String instructionAsText = linha.substring(0, firstIndexOfEspaco);
-			System.out.println(instructionAsText);
-			montado += instructions.get(instructionAsText);
-			int sizeOperando = operandSize.get(instructionAsText);
-			if(sizeOperando > 0) {
-				montado += conversaoCompleta(Integer.parseInt(linha.substring(firstIndexOfEspaco+1, linha.length())), sizeOperando);
+			if(!linha.isEmpty()) {
+				int firstIndexOfEspaco = firstIndexesOfEspaco.get(i); // desde que eu peguei o índice, só alterei pra frente, então vale
+				String instructionAsText = linha.substring(0, firstIndexOfEspaco);
+				System.out.println(instructionAsText);
+				montado += instructions.get(instructionAsText);
+				int sizeOperando = operandSize.get(instructionAsText);
+				if(sizeOperando > 0) {
+					montado += conversaoCompleta(Integer.parseInt(linha.substring(firstIndexOfEspaco+1, linha.length())), sizeOperando);
+				}
+				montado += "\n";
 			}
-			montado += "\n";
 			i++;
 		}
 		janela.setTxtCode(montado);
