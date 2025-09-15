@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import main.UnidadeControle;
 import util.Conversoes;
 import util.Montador;
+import util.StaticObjects;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -88,7 +89,9 @@ public class MainWindow {
 	private void initialize() {
 		MainWindow currentJanela = this;
 		wu = new WindowUpdater(this, 1000);
+		wu.memw = new MemoriaWindow();
 		uc = new UnidadeControle();
+		StaticObjects.setUc(uc);
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 640, 673);

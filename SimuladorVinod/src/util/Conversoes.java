@@ -2,8 +2,28 @@ package util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Conversoes {
+	private static HashMap<String, String> binToHex = new HashMap<>();
+	static {
+		binToHex.put("0000", "0");
+		binToHex.put("0001", "1");
+		binToHex.put("0010", "2");
+		binToHex.put("0011", "3");
+		binToHex.put("0100", "4");
+		binToHex.put("0101", "5");
+		binToHex.put("0110", "6");
+		binToHex.put("0111", "7");
+		binToHex.put("1000", "8");
+		binToHex.put("1001", "9");
+		binToHex.put("1010", "A");
+		binToHex.put("1011", "B");
+		binToHex.put("1100", "C");
+		binToHex.put("1101", "D");
+		binToHex.put("1110", "E");
+		binToHex.put("1111", "F");
+	}
 	
 	public static int bitArrayToDecimal(ArrayList<Integer> data) {
 		while(data.size()<32) {
@@ -28,6 +48,14 @@ public class Conversoes {
 		}
 		return converted;
 
+	}
+	
+	public static String binaryToHex(String binary) { // só funciona se for múltiplo de 4. não vou corrigir
+		String retorno = "";
+		for(int i = 0; i<binary.length(); i+=4) { //para cada bloco de 4
+			retorno += binToHex.get(binary.substring(i, i+4)); // dá um append no valor para cada bloco de 4
+		}
+		return retorno;
 	}
 	
 	public static String conversaoCompleta(int operando, int size) {

@@ -3,6 +3,7 @@ package visao;
 public class WindowUpdater extends Thread{
 	
 	private MainWindow mw;
+	public MemoriaWindow memw;
 	int sleep;
 	private boolean pause;
 	
@@ -23,6 +24,7 @@ public class WindowUpdater extends Thread{
 					sleep(1000);
 				}
 				mw.update();
+				memw.update();
 				sleep(sleep);
 				
 			} catch (InterruptedException e) {
