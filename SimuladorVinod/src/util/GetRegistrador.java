@@ -16,7 +16,8 @@ import modelo.registradores.TemporaryInstructionRegister;
 
 public class GetRegistrador {
 	private ArrayList<Registrador> registradoresVd = new ArrayList<>(16);
-	public GetRegistrador() {
+	private static GetRegistrador gr = null;
+	private GetRegistrador() {
 		registradoresVd.add(new ProgramCounter());
 		registradoresVd.add(new Acumulador());
 		registradoresVd.add(new StackPointer());
@@ -29,6 +30,12 @@ public class GetRegistrador {
 		registradoresVd.add(new Smask());
 		for (int i=0;  i<6; i++)
 			registradoresVd.add(new Registrador(16));
+	}
+	public static GetRegistrador getGr() {
+		if(gr == null) {
+			gr = new GetRegistrador();
+		}
+		return gr;
 	}
 	
 	public Registrador get(int registrador) {

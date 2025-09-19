@@ -5,14 +5,22 @@ import modelo.registradores.Memoria;
 
 public class MemoriaPrincipal extends Memoria {
     private int enderecoSlecionado;
-
-
-    public MemoriaPrincipal() {
+    private static MemoriaPrincipal mp = null;
+    
+    private MemoriaPrincipal() {
         super(4096, 16);
         for(int i=0; i<4096; i++){
             mem.add(new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
         }
     }
+    
+    public static MemoriaPrincipal getMemoriaPrincipal() {
+    	if(mp == null) {
+    		mp = new MemoriaPrincipal();
+    	}
+    	return mp;
+    }
+    
     public void write(Integer[] conteudo){
         mem.set(enderecoSlecionado, conteudo.clone());
     }

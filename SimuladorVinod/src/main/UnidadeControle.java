@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import modelo.AMux;
-import modelo.Desclocador;
+import modelo.Deslocador;
 import modelo.MemoriaPrincipal;
 import modelo.ULA;
-import modelo.registradores.MemoryAdressRegister;
+import modelo.registradores.MemoryAddressRegister;
 import modelo.registradores.MemoryBufferRegisterRead;
 import modelo.registradores.MemoryBufferRegisterWrite;
 import modelo.registradores.Registrador;
@@ -22,24 +22,24 @@ public class UnidadeControle extends Thread{
 	private int sleepInMillis = 1000;
 	private boolean stop = false;
 	private boolean pause = false;
-	public MemoriaPrincipal memoriaPrincipal = new MemoriaPrincipal();
+	public MemoriaPrincipal memoriaPrincipal = MemoriaPrincipal.getMemoriaPrincipal();
 	private int[] pcValueForPause = null;
 	private boolean pausaAutomaticaJaPassou = false;
 	@Override
 	public void run() {
-		MicroprogramCounter mpc = new MicroprogramCounter();
-		MemoriaDeControle mc = new MemoriaDeControle(mpc);
-		MicroinstructionRegister mir = new MicroinstructionRegister();
-		IncrementMicroprogramCounter impc = new IncrementMicroprogramCounter(mpc);
-		ControladorDeFluxo cdf = new ControladorDeFluxo();
-		MMux mmux = new MMux();
-		AMux amux = new AMux();
-		ULA ula = new ULA();
-		Desclocador desclocador = new Desclocador();
-		MemoryBufferRegisterRead mbrRead = new MemoryBufferRegisterRead(memoriaPrincipal);
-		MemoryBufferRegisterWrite mbrWrite = new MemoryBufferRegisterWrite(memoriaPrincipal);
-		MemoryAdressRegister mar = new MemoryAdressRegister(memoriaPrincipal);
-		gr = new GetRegistrador();
+		MicroprogramCounter mpc = MicroprogramCounter.getMpc();
+		MemoriaDeControle mc = MemoriaDeControle.getMemC();
+		MicroinstructionRegister mir = MicroinstructionRegister.getMir();
+		IncrementMicroprogramCounter impc = IncrementMicroprogramCounter.getImpc();
+		ControladorDeFluxo cdf = ControladorDeFluxo.getCf();
+		MMux mmux = MMux.getMmux();
+		AMux amux = AMux.getAmux();
+		ULA ula = ULA.getUla();
+		Deslocador desclocador = Deslocador.getDeslocador();
+		MemoryBufferRegisterRead mbrRead = MemoryBufferRegisterRead.getMbrRead();
+		MemoryBufferRegisterWrite mbrWrite = MemoryBufferRegisterWrite.getMbrWrite();
+		MemoryAddressRegister mar = MemoryAddressRegister.getMar();
+		gr = GetRegistrador.getGr();
 		Integer[] zeroValue = new Integer[32];
 		for (int i = 0; i < 32; i++) {
 			zeroValue[i] = 0;

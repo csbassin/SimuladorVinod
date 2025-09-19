@@ -1,7 +1,8 @@
 package modelo;
 
 public class ULA {
-    // A, B, F, R;
+	private static ULA ula = null;
+	// A, B, F, R;
     private int[] A, B, F, D, R;
 
     public int[] getA() {
@@ -13,10 +14,16 @@ public class ULA {
 	public int[] getF() {
 		return F;
 	}
-	public ULA(){
+	private ULA(){
         R = new int[16];
         D = new int[2]; //D = NZ
     }
+	public static ULA getUla() {
+		if(ula == null) {
+			ula = new ULA();
+		}
+		return ula;
+	}
     public void perform(){
         //SOMA
         if (F[0] == 0 && F[1]==0){

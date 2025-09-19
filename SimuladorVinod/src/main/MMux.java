@@ -3,10 +3,17 @@ package main;
 import modelo.registradores.Multiplexador;
 
 public class MMux extends Multiplexador{
-	public MMux() {
+	private static MMux mmux = null;
+	private MMux() {
 		super(2,1);
 		entradas.add(null);
 		entradas.add(null);
+	}
+	public static MMux getMmux() {
+		if(mmux == null) {
+			mmux = new MMux();
+		}
+		return mmux;
 	}
 	public void setControle(int[] controle) {
 		this.controle = controle;

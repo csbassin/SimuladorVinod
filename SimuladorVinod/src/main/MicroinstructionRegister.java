@@ -5,11 +5,20 @@ import java.util.ArrayList;
 import modelo.registradores.Registrador;
 
 public class MicroinstructionRegister extends Registrador{
-	public MicroinstructionRegister() {
+	private static MicroinstructionRegister mir = null;
+	
+	private MicroinstructionRegister() {
 		super(32);
 		for(int i = 0; i<32; i++) {
 			this.registrador[i] = 0;
 		}
+	}
+	
+	public static MicroinstructionRegister getMir() {
+		if(mir == null) {
+			mir = new MicroinstructionRegister();
+		}
+		return mir;
 	}
 	
 	public ArrayList<Integer> getPieceAs32bit(int start, int end){

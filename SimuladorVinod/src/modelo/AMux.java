@@ -3,12 +3,18 @@ package modelo;
 import modelo.registradores.Multiplexador;
 
 public class AMux extends Multiplexador{
-    public AMux() {
+	private static AMux amux = null;
+    private AMux() {
         super(2,1);
         entradas.add(null);
         entradas.add(null);
     }
-
+    public static AMux getAmux() {
+    	if(amux == null) {
+    		amux = new AMux();
+    	}
+    	return amux;
+    }
     public void setControle(int[]controle) {
         this.controle = controle;
     }

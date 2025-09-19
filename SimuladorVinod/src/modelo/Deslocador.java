@@ -1,14 +1,22 @@
 package modelo;
 
-public class Desclocador {
+public class Deslocador { // tava desclocador kkkkkkkkkkkk
+	private static Deslocador deslocador = null;
     private int[] entrada;  //16bits
     private int[] desl_mir; //2bits
     private int[] saida;    //16bits
 
-    public Desclocador(){
+    private Deslocador(){
         entrada = new int[16];
         saida = new int[16];
         desl_mir = new int[2];
+    }
+    
+    public static Deslocador getDeslocador() {
+    	if(deslocador == null) {
+    		deslocador = new Deslocador();
+    	}
+    	return deslocador;
     }
 
     public void perform(){

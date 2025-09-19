@@ -6,8 +6,9 @@ import modelo.registradores.Memoria;
 import util.Conversoes;
 
 public class MemoriaDeControle extends Memoria{
-	private MicroprogramCounter mpc;
-	public MemoriaDeControle(MicroprogramCounter mpc) {
+	private MicroprogramCounter mpc = MicroprogramCounter.getMpc();
+	private static MemoriaDeControle mc = null;
+	private MemoriaDeControle() {
 		super(78, 32);
 		this.mem.add(new Integer[]{0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}); //0
 		this.mem.add(new Integer[]{0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0}); //1
@@ -88,10 +89,13 @@ public class MemoriaDeControle extends Memoria{
 		this.mem.add(new Integer[]{0,0,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0}); //76
 		this.mem.add(new Integer[]{0,0,0,1,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0}); //77
 		this.mem.add(new Integer[]{0,1,1,0,0,0,0,0,0,0,0,1,1,0,1,0,1,0,1,0,0,1,1,0,0,1,0,0,1,0,1,1}); //78
-		
-		this.mpc = mpc;
 	}
-	
+	public static MemoriaDeControle getMemC() {
+		if(mc == null) {
+			mc = new MemoriaDeControle();
+		}
+		return mc;
+	}
 	public Integer[] getValueAtMPCAddress() {
 		ArrayList<Integer> arraylist = new ArrayList<Integer>(mpc.getRegistrador().length);
 		for(int i = 0; i<mpc.getRegistrador().length; i++) {

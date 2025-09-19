@@ -7,12 +7,18 @@ import java.util.stream.Collectors;
 import util.Conversoes;
 
 public class IncrementMicroprogramCounter {
-	public MicroprogramCounter mpc;
+	private MicroprogramCounter mpc = MicroprogramCounter.getMpc();
 	
-	public IncrementMicroprogramCounter(MicroprogramCounter mpc) {
-		this.mpc = mpc;
+	private static IncrementMicroprogramCounter impc = null;
+	private IncrementMicroprogramCounter() {
+		
 	}
-	
+	public static IncrementMicroprogramCounter getImpc() {
+		if(impc == null) {
+			impc = new IncrementMicroprogramCounter();
+		}
+		return impc;
+	}
 	public void getIncremento() {
 		ArrayList<Integer> valor = new ArrayList<>(Arrays.stream(mpc.getRegistrador()).boxed().collect(Collectors.toList()));
 		int value = Conversoes.bitArrayToDecimal(valor);
