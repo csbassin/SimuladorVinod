@@ -37,6 +37,10 @@ public class ControlesWindow{
 	private JButton btnPlay;
 	private JButton btnStop;
 	private UnidadeControle uc = UnidadeControle.getUc();
+	private WindowUpdater wu;
+	private JLabel lblNewLabel_1;
+	private JSpinner spinner;
+	private JButton btnAplicar;
 	
 	public static void main(String[] args) {
 		try {
@@ -52,14 +56,14 @@ public class ControlesWindow{
 		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				//TODO remove later
-				new ControlesWindow();
+				
 			}
 		});
 	}
 	
 	
-	public ControlesWindow() {
+	public ControlesWindow(WindowUpdater wu) {
+		this.wu = wu;
 		initialize();
 	}
 	
@@ -68,7 +72,7 @@ public class ControlesWindow{
 	 */
 	private void initialize() {
 		JFrame frame = new JFrame();
-		frame.setTitle("Endereços em azul são parte da pilha. Endereço em cinza é para onde o PC aponta no momento.");
+		frame.setTitle("Inicie, pause ou resete o processador");
 		frame.setBounds(0, 0, 670, 400);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -84,7 +88,7 @@ public class ControlesWindow{
 		JSeparator separator = new JSeparator();
 		springLayout.putConstraint(SpringLayout.NORTH, separator, 57, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, separator, 10, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, separator, 645, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, separator, -10, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(separator);
 		
 		btnPause = new JButton("");
@@ -110,9 +114,15 @@ public class ControlesWindow{
 		btnPlay.setToolTipText("Continuar");
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uc.setPause(false);
-				btnPlay.setEnabled(false);
-				btnPause.setEnabled(true);
+				if(!uc.isAlive()) {
+					uc.start();
+					wu.start();
+				}else {
+					uc.setPause(false);
+					btnPlay.setEnabled(false);
+					btnPause.setEnabled(true);
+				}
+				
 			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnPlay, 6, SpringLayout.SOUTH, separator);
@@ -125,7 +135,12 @@ public class ControlesWindow{
 		frame.getContentPane().add(btnPlay);
 		
 		btnStop = new JButton("");
-		btnStop.setToolTipText("Parar");
+		btnStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wu.setStop(true);
+				uc.setStop(true);
+			}
+		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnStop, 6, SpringLayout.SOUTH, separator);
 		springLayout.putConstraint(SpringLayout.WEST, btnStop, 6, SpringLayout.EAST, btnPlay);
 		springLayout.putConstraint(SpringLayout.SOUTH, btnStop, 0, SpringLayout.SOUTH, btnPause);
@@ -134,6 +149,39 @@ public class ControlesWindow{
 		btnStop.setContentAreaFilled(false);
 		btnStop.setBorder(new LineBorder(Color.WHITE, 3));
 		frame.getContentPane().add(btnStop);
+		
+		lblNewLabel_1 = new JLabel("Pausa entre subciclos (em milissegundos):");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1, 6, SpringLayout.SOUTH, separator);
+		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1, 6, SpringLayout.EAST, btnStop);
+		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel_1, -20, SpringLayout.EAST, frame.getContentPane());
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		spinner = new JSpinner();
+		springLayout.putConstraint(SpringLayout.NORTH, spinner, 6, SpringLayout.SOUTH, lblNewLabel_1);
+		springLayout.putConstraint(SpringLayout.WEST, spinner, 6, SpringLayout.EAST, btnStop);
+		springLayout.putConstraint(SpringLayout.SOUTH, spinner, -245, SpringLayout.SOUTH, frame.getContentPane());
+		spinner.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		frame.getContentPane().add(spinner);
+		
+		btnAplicar = new JButton("Aplicar");
+		btnAplicar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int segundos = Integer.parseInt(spinner.getValue().toString());
+				uc.setSleepInMillis(segundos);
+				wu.setSleep(segundos/2);
+			}
+		});
+		btnAplicar.setForeground(Color.WHITE);
+		springLayout.putConstraint(SpringLayout.EAST, spinner, -6, SpringLayout.WEST, btnAplicar);
+		springLayout.putConstraint(SpringLayout.EAST, btnAplicar, 504, SpringLayout.WEST, frame.getContentPane());
+		btnAplicar.setBorder(new LineBorder(Color.WHITE, 2));
+		btnAplicar.setContentAreaFilled(false);
+		btnAplicar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		springLayout.putConstraint(SpringLayout.WEST, btnAplicar, 434, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, btnAplicar, 6, SpringLayout.SOUTH, lblNewLabel_1);
+		frame.getContentPane().add(btnAplicar);
 	}
 	
 	

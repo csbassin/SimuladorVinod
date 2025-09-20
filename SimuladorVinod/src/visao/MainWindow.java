@@ -13,7 +13,6 @@ import javax.swing.JLabel;
 import main.UnidadeControle;
 import util.Conversoes;
 import util.Montador;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
@@ -23,8 +22,6 @@ public class MainWindow {
 	
 	private JFrame frame;
 	private JTextArea txtCode;
-	private JSpinner spinner;
-	private JButton btnAplicar;
 	private String[] title = new String[] {"Registrador", "Valor"};
 	private DefaultTableModel dtm = new DefaultTableModel(new String[0][2], title);
 	JTable tableProdutos;
@@ -37,7 +34,6 @@ public class MainWindow {
 	private JTable tableMP;
 	private JScrollPane scrollAssembly;
 	private JTextArea txtAssembly;
-	private JButton btnPause;
 	private JButton btnAplicar_1_1;
 	private JLabel lblTempo;
 	private JSpinner spnPausaPC;
@@ -88,7 +84,7 @@ public class MainWindow {
 		MainWindow currentJanela = this;
 		wu = WindowUpdater.getWu(this, 1000);
 		wu.memw = new MemoriaWindow();
-		new ControlesWindow();
+		new ControlesWindow(wu);
 		uc = UnidadeControle.getUc();
 		
 		frame = new JFrame();
@@ -96,25 +92,6 @@ public class MainWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Simulador MIC-1 - Por Cauã Bassin, Lucas Avelar, Bernardo Rebello, Vitor Lemos e Allan Gaetani");
-		
-		spinner = new JSpinner();
-		spinner.setBounds(96, 260, 52, 20);
-		frame.getContentPane().add(spinner);
-		
-		JLabel lblNewLabel = new JLabel("Pausa entre subciclos (em milissegundos):");
-		lblNewLabel.setBounds(96, 235, 218, 14);
-		frame.getContentPane().add(lblNewLabel);
-		
-		btnAplicar = new JButton("Aplicar");
-		btnAplicar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int segundos = Integer.parseInt(spinner.getValue().toString());
-				uc.setSleepInMillis(segundos);
-				wu.setSleep(segundos/2);
-			}
-		});
-		btnAplicar.setBounds(158, 259, 65, 23);
-		frame.getContentPane().add(btnAplicar);
 		
 		JLabel lblNewLabel_1 = new JLabel("Compilado:");
 		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -212,21 +189,6 @@ public class MainWindow {
 		});
 		btnMontar.setBounds(10, 259, 72, 23);
 		frame.getContentPane().add(btnMontar);
-		
-		btnPause = new JButton("Pausar");
-		btnPause.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(uc.isPause()) {
-					uc.setPause(false);
-					wu.setPause(false);
-				}else {
-					uc.setPause(true);
-					wu.setPause(true);
-				}
-			}
-		});
-		btnPause.setBounds(232, 259, 72, 23);
-		frame.getContentPane().add(btnPause);
 		
 		btnAplicar_1_1 = new JButton("Editar Valores");
 		btnAplicar_1_1.addActionListener(new ActionListener() {

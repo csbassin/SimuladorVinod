@@ -14,6 +14,7 @@ public class WindowUpdater extends Thread{
 	public MemoriaWindow memw;
 	int sleep;
 	private boolean pause;
+	private boolean stop = false;
 	
 	private WindowUpdater(MainWindow mw, int sleep) {
 		this.mw = mw;
@@ -26,7 +27,7 @@ public class WindowUpdater extends Thread{
 
 	@Override
 	public void run() {
-		while(true) {
+		while(!stop) {
 			try {
 				while(pause) {
 					sleep(1000);
@@ -49,5 +50,14 @@ public class WindowUpdater extends Thread{
 	public void setPause(boolean pause) {
 		this.pause = pause;
 	}
+
+	public boolean isStop() {
+		return stop;
+	}
+
+	public void setStop(boolean stop) {
+		this.stop = stop;
+	}
+	
 	
 }
