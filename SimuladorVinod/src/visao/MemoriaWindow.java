@@ -16,8 +16,6 @@ import modelo.MemoriaPrincipal;
 import util.Conversoes;
 import util.GetRegistrador;
 import util.Montador;
-import util.StaticObjects;
-
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +39,19 @@ public class MemoriaWindow{
 		public void paintRowsAfter(int row) {
 			fireTableRowsUpdated(row, 4095);
 		}
+		public void paintRow(int row) {
+			fireTableRowsUpdated(row, row);
+		}
+		public void resetBefore(int row) {
+			if(row>0) {
+				fireTableRowsUpdated(row-1, row);
+			}
+		}
 		
 		public Color getColor(int row) {
 			if(row>=currentSp) {
+				return Color.BLUE;
+			}else if(row == currentPc) {
 				return Color.GRAY;
 			}
 			return Color.WHITE;
@@ -55,7 +63,13 @@ public class MemoriaWindow{
 	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 	        CustomTableModel model = (CustomTableModel) table.getModel();
 	        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-	        c.setBackground(model.getColor(row));
+	        Color bg = model.getColor(row);
+	        c.setBackground(bg);
+	        if(bg.equals(Color.BLUE)||bg.equals(Color.GRAY)) {
+	        	c.setForeground(Color.WHITE);
+	        }else {
+	        	c.setForeground(Color.BLACK);
+	        }
 	        return c;
 	    }
 	}
@@ -66,10 +80,10 @@ public class MemoriaWindow{
 	private final JLabel lblNewLabel = new JLabel("Memória Principal");
 	private final GetRegistrador gr = GetRegistrador.getGr();
 	public static int currentSp = 4096;
+	public static int currentPc = -1;
+	public static int lastPc = -1;
+	private JScrollPane scrollPane;
 	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
 	public static void main(String[] args) {
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
@@ -94,23 +108,29 @@ public class MemoriaWindow{
 		initialize();
 	}
 	
-	/*
+	/**
 	 * @wbp.parser.entryPoint
-	 * */
+	 */
 	private void initialize() {
+		
 		JFrame frame = new JFrame();
+		frame.setTitle("Endereços em azul são parte da pilha. Endereço em cinza é para onde o PC aponta no momento.");
 		frame.setBounds(0, 0, 670, 400);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
-		frame.getContentPane().setLayout(null);
-		lblNewLabel.setBounds(10, 10, 225, 38);
+		SpringLayout springLayout = new SpringLayout();
+		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel, 10, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel, 10, SpringLayout.WEST, frame.getContentPane());
+		frame.getContentPane().setLayout(springLayout);
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 28));
 		frame.getContentPane().add(lblNewLabel);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 57, 635, 2);
+		springLayout.putConstraint(SpringLayout.NORTH, separator, 57, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, separator, 10, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, separator, -10, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(separator);
 		
 		tabelaMemoria = new JTable(dtm);
@@ -119,22 +139,26 @@ public class MemoriaWindow{
 		String zeroHex = Conversoes.binaryToHex(zeroBin);
 		for(int i = 0; i<4096; i++) {
 			String[] valueCols = {String.valueOf(i),
-								String.valueOf(0),
 								zeroBin,
+								String.valueOf(0),
 								zeroHex};
 			dtm.addRow(valueCols);
 		}
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(20, 70, 612, 269);
+		tabelaMemoria.setCellSelectionEnabled(false);
+		scrollPane = new JScrollPane();
+		springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 70, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, scrollPane, 20, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -20, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, scrollPane, -20, SpringLayout.EAST, frame.getContentPane());
 		scrollPane.setViewportView(tabelaMemoria);
 		frame.getContentPane().add(scrollPane);
 	}
 	
 	
 	public void update() {
+		lastPc = currentPc;
 		for(int i = 0; i<4096; i++) {
-			int currentValue = Conversoes.binaryIntToDecimal(StaticObjects.getUc().memoriaPrincipal.get(i));
+			int currentValue = Conversoes.binaryIntToDecimal(UnidadeControle.getUc().memoriaPrincipal.get(i));
 			if(currentValue != 0) {
 				String binario = Conversoes.conversaoCompleta(currentValue, 16);
 				dtm.setValueAt(binario, i, 1); // seta o binário
@@ -143,8 +167,14 @@ public class MemoriaWindow{
 			}
 		}
 		currentSp = Conversoes.binaryIntToDecimal(gr.get(2).getRegistrador());
+		currentPc = Conversoes.binaryIntToDecimal(gr.get(0).getRegistrador());
 		if(currentSp <= 4095) {
 			dtm.paintRowsAfter(currentSp);
 		}
+		if(lastPc!=currentPc) {
+			dtm.paintRow(lastPc);
+		}
+		dtm.paintRow(currentPc);
+		//dtm.resetBefore(currentPc);
 	}
 }

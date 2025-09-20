@@ -17,7 +17,16 @@ import util.Other;
 import visao.WindowData;
 
 public class UnidadeControle extends Thread{
-	
+	private static UnidadeControle uc = null;
+	public static UnidadeControle getUc() {
+		if(uc == null) {
+			uc = new UnidadeControle();
+		}
+		return uc;
+	}
+	private UnidadeControle() {
+		
+	}
 	private GetRegistrador gr;
 	private int sleepInMillis = 1000;
 	private boolean stop = false;

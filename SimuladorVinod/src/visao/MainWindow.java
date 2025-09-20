@@ -13,7 +13,6 @@ import javax.swing.JLabel;
 import main.UnidadeControle;
 import util.Conversoes;
 import util.Montador;
-import util.StaticObjects;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -27,9 +26,7 @@ public class MainWindow {
 	private JSpinner spinner;
 	private JButton btnAplicar;
 	private String[] title = new String[] {"Registrador", "Valor"};
-	private String[] titlemp = new String[] {"Endereço", "Valor (binário)", "Valor (decimal)"};
 	private DefaultTableModel dtm = new DefaultTableModel(new String[0][2], title);
-	private DefaultTableModel dtmmp = new DefaultTableModel(new String[0][2], titlemp);
 	JTable tableProdutos;
 	private JLabel lblNewLabel_1_2;
 	private JTextArea txtMicro;
@@ -49,6 +46,7 @@ public class MainWindow {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		// chamar o construtor por qualquer outro lugar dá merda e eu não sei o porquê
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
@@ -88,10 +86,10 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		MainWindow currentJanela = this;
-		wu = new WindowUpdater(this, 1000);
+		wu = WindowUpdater.getWu(this, 1000);
 		wu.memw = new MemoriaWindow();
-		uc = new UnidadeControle();
-		StaticObjects.setUc(uc);
+		new ControlesWindow();
+		uc = UnidadeControle.getUc();
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 640, 673);
@@ -180,18 +178,7 @@ public class MainWindow {
 		});
 		btnAplicar_1.setBounds(231, 290, 72, 23);
 		frame.getContentPane().add(btnAplicar_1);
-		
-		scrollMP = new JScrollPane();
-		scrollMP.setBounds(10, 323, 604, 236);
-		tableMP = new JTable(dtmmp);
-		String[] data = new String[2];
-		for(int i = 0; i<4096; i++) {
-			data[0] = String.valueOf(i);;
-			data[1] = "";
-			dtmmp.addRow(data);
-		}
-		scrollMP.setViewportView(tableMP);
-		frame.getContentPane().add(scrollMP);
+	
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(161, 40, 153, 185);
@@ -288,10 +275,7 @@ public class MainWindow {
 		dtm.setValueAt(WindowData.f, 10, 1);
 		txtMicro.setText("Subciclo atual: "+WindowData.currentSub+"\nMicroinstrução atual: "+WindowData.microAtual);
 		lblTempo.setText("Tempo de execução: "+WindowData.executionTime+"ms");
-		for(int i = 0; i<4096; i++) {
-			dtmmp.setValueAt(Conversoes.integerArrayToString(uc.memoriaPrincipal.get(i)), i, 1);
-			dtmmp.setValueAt(Conversoes.binaryIntToDecimal(uc.memoriaPrincipal.get(i)), i, 2);
-		}
+		
 		
 	}
 	public void setTxtCode(String code) {

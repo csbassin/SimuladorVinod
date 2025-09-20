@@ -1,13 +1,21 @@
 package visao;
 
 public class WindowUpdater extends Thread{
+	private static WindowUpdater wu = null;
+	
+	public static WindowUpdater getWu(MainWindow mw, int sleep) {
+		if(wu == null) {
+			wu = new WindowUpdater(mw, sleep);
+		}
+		return wu;
+	}
 	
 	private MainWindow mw;
 	public MemoriaWindow memw;
 	int sleep;
 	private boolean pause;
 	
-	public WindowUpdater(MainWindow mw, int sleep) {
+	private WindowUpdater(MainWindow mw, int sleep) {
 		this.mw = mw;
 		this.sleep = sleep;
 	}
