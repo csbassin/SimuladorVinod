@@ -29,6 +29,7 @@ import javax.swing.SpringLayout;
 import javax.swing.JSeparator;
 import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
+import javax.swing.JPanel;
 
 public class ControlesWindow{
 
@@ -41,6 +42,7 @@ public class ControlesWindow{
 	private JLabel lblNewLabel_1;
 	private JSpinner spinner;
 	private JButton btnAplicar;
+	private JButton btnReset;
 	
 	public static void main(String[] args) {
 		try {
@@ -73,7 +75,8 @@ public class ControlesWindow{
 	private void initialize() {
 		JFrame frame = new JFrame();
 		frame.setTitle("Inicie, pause ou resete o processador");
-		frame.setBounds(0, 0, 670, 400);
+		frame.setBounds(0, 410, 459, 272);
+		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
@@ -94,7 +97,7 @@ public class ControlesWindow{
 		btnPause = new JButton("");
 		btnPause.setContentAreaFilled(false);
 		btnPause.setToolTipText("Pausar");
-		btnPause.setBackground(Color.DARK_GRAY);
+		btnPause.setBackground(Color.GRAY);
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uc.setPause(true);
@@ -111,6 +114,7 @@ public class ControlesWindow{
 		frame.getContentPane().add(btnPause);
 		
 		btnPlay = new JButton("");
+		btnPlay.setBackground(Color.GRAY);
 		btnPlay.setToolTipText("Continuar");
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -120,7 +124,9 @@ public class ControlesWindow{
 				}else {
 					uc.setPause(false);
 					btnPlay.setEnabled(false);
+
 					btnPause.setEnabled(true);
+					
 				}
 				
 			}
@@ -135,6 +141,7 @@ public class ControlesWindow{
 		frame.getContentPane().add(btnPlay);
 		
 		btnStop = new JButton("");
+		btnStop.setBackground(Color.GRAY);
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				wu.setStop(true);
@@ -151,21 +158,24 @@ public class ControlesWindow{
 		frame.getContentPane().add(btnStop);
 		
 		lblNewLabel_1 = new JLabel("Pausa entre subciclos (em milissegundos):");
+		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1, 6, SpringLayout.SOUTH, btnPause);
+		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1, 20, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel_1, -21, SpringLayout.EAST, lblNewLabel);
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1, 6, SpringLayout.SOUTH, separator);
-		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1, 6, SpringLayout.EAST, btnStop);
-		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel_1, -20, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		spinner = new JSpinner();
-		springLayout.putConstraint(SpringLayout.NORTH, spinner, 6, SpringLayout.SOUTH, lblNewLabel_1);
-		springLayout.putConstraint(SpringLayout.WEST, spinner, 6, SpringLayout.EAST, btnStop);
-		springLayout.putConstraint(SpringLayout.SOUTH, spinner, -245, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, spinner, 193, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, spinner, 20, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, spinner, 160, SpringLayout.WEST, frame.getContentPane());
 		spinner.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		frame.getContentPane().add(spinner);
 		
 		btnAplicar = new JButton("Aplicar");
+		springLayout.putConstraint(SpringLayout.NORTH, btnAplicar, 6, SpringLayout.SOUTH, lblNewLabel_1);
+		springLayout.putConstraint(SpringLayout.WEST, btnAplicar, 6, SpringLayout.EAST, spinner);
+		springLayout.putConstraint(SpringLayout.EAST, btnAplicar, -164, SpringLayout.EAST, frame.getContentPane());
 		btnAplicar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int segundos = Integer.parseInt(spinner.getValue().toString());
@@ -174,18 +184,26 @@ public class ControlesWindow{
 			}
 		});
 		btnAplicar.setForeground(Color.WHITE);
-		springLayout.putConstraint(SpringLayout.EAST, spinner, -6, SpringLayout.WEST, btnAplicar);
-		springLayout.putConstraint(SpringLayout.EAST, btnAplicar, 504, SpringLayout.WEST, frame.getContentPane());
 		btnAplicar.setBorder(new LineBorder(Color.WHITE, 2));
 		btnAplicar.setContentAreaFilled(false);
 		btnAplicar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		springLayout.putConstraint(SpringLayout.WEST, btnAplicar, 434, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.NORTH, btnAplicar, 6, SpringLayout.SOUTH, lblNewLabel_1);
 		frame.getContentPane().add(btnAplicar);
-	}
-	
-	
-	public void update() {
 		
+		btnReset = new JButton("");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				uc.setResetar(true);
+			}
+		});
+		springLayout.putConstraint(SpringLayout.NORTH, btnReset, 6, SpringLayout.SOUTH, separator);
+		springLayout.putConstraint(SpringLayout.WEST, btnReset, 6, SpringLayout.EAST, btnStop);
+		springLayout.putConstraint(SpringLayout.SOUTH, btnReset, 0, SpringLayout.SOUTH, btnPause);
+		springLayout.putConstraint(SpringLayout.EAST, btnReset, 102, SpringLayout.EAST, btnStop);
+		btnReset.setIcon(new ImageIcon(ControlesWindow.class.getResource("/assets/ResetIcon.png")));
+		btnReset.setContentAreaFilled(false);
+		btnReset.setBorder(new LineBorder(Color.WHITE, 3));
+		btnReset.setBackground(Color.GRAY);
+		frame.getContentPane().add(btnReset);
 	}
+	
 }

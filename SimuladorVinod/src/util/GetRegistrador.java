@@ -41,4 +41,18 @@ public class GetRegistrador {
 	public Registrador get(int registrador) {
 		return registradoresVd.get(registrador);
 	}
+	public void reset() {
+		// reseta pc, ac, 
+		for (int i=0;  i<2; i++) {
+			this.get(i).set(new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+		}
+		// reseta sp
+		this.get(2).set(new Integer[]{0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0});
+		
+		//reseta a, b, c, d, e, f
+		for(int i = 10; i<16; i++) {
+			this.get(i).set(new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+		}
+			
+	}
 }

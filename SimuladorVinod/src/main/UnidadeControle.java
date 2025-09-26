@@ -34,6 +34,7 @@ public class UnidadeControle extends Thread{
 	public MemoriaPrincipal memoriaPrincipal = MemoriaPrincipal.getMemoriaPrincipal();
 	private int[] pcValueForPause = null;
 	private boolean pausaAutomaticaJaPassou = false;
+	private boolean resetar = false;
 	@Override
 	public void run() {
 		MicroprogramCounter mpc = MicroprogramCounter.getMpc();
@@ -58,6 +59,10 @@ public class UnidadeControle extends Thread{
 		int contRead = 0, contWrite = 0;
 		long executionTime = 0;
 		while(!stop) {
+			if(resetar) {
+				this.reset();
+				resetar = false;
+			}
 			long cycleStartTime = System.currentTimeMillis();
 			try {
 				updateRegisterExibitionValue();
@@ -193,7 +198,12 @@ public class UnidadeControle extends Thread{
 		WindowData.e = Conversoes.bitArrayToC2(gr.get(14).getRegistrador());
 		WindowData.f = Conversoes.bitArrayToC2(gr.get(15).getRegistrador());
 	}
-	
+	public void reset() {
+		//this.interrupt();
+		gr.reset();
+		memoriaPrincipal.reset();
+		//uc = new UnidadeControle();
+	}
 	public int getSleepInMillis() {
 		return sleepInMillis;
 	}
@@ -220,7 +230,14 @@ public class UnidadeControle extends Thread{
 	public MemoriaPrincipal getMemoriaPrincipal() {
 		return memoriaPrincipal;
 	}
+	
 
+	public boolean isResetar() {
+		return resetar;
+	}
+	public void setResetar(boolean resetar) {
+		this.resetar = resetar;
+	}
 	public void setMemoriaPrincipal(MemoriaPrincipal memoriaPrincipal) {
 		this.memoriaPrincipal = memoriaPrincipal;
 	}

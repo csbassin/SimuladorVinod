@@ -1,5 +1,7 @@
 package visao;
 
+import main.UnidadeControle;
+
 public class WindowUpdater extends Thread{
 	private static WindowUpdater wu = null;
 	
@@ -15,6 +17,7 @@ public class WindowUpdater extends Thread{
 	int sleep;
 	private boolean pause;
 	private boolean stop = false;
+	UnidadeControle uc = UnidadeControle.getUc();
 	
 	private WindowUpdater(MainWindow mw, int sleep) {
 		this.mw = mw;
@@ -28,17 +31,19 @@ public class WindowUpdater extends Thread{
 	@Override
 	public void run() {
 		while(!stop) {
-			try {
-				while(pause) {
-					sleep(1000);
+			//if(!uc.isResetar()) {
+				try {
+					while(pause) {
+						sleep(1000);
+					}
+					mw.update();
+					memw.update();
+					sleep(sleep);
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-				mw.update();
-				memw.update();
-				sleep(sleep);
-				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			//}
 		}
 		
 	}

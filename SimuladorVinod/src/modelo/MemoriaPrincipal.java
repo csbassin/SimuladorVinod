@@ -30,4 +30,9 @@ public class MemoriaPrincipal extends Memoria {
     public void setEnderecoSlecionado(int enderecoSlecionado) {
         this.enderecoSlecionado = enderecoSlecionado;
     }
+    public void reset() {
+    	for(int i=0; i<4096; i++){
+            mem.set(i, new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+        }
+    }
 }
