@@ -4,6 +4,7 @@ import modelo.registradores.Registrador;
 
 public class MicroprogramCounter extends Registrador{
 	private static MicroprogramCounter mpc = null;
+	// quem diabos criou isso com 32 bits?
 	private MicroprogramCounter() {
 		super(32);
 	}
@@ -12,6 +13,9 @@ public class MicroprogramCounter extends Registrador{
 			MicroprogramCounter.mpc = new MicroprogramCounter();
 		}
 		return mpc;
+	}
+	public void reset() {
+		this.set(new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
 	}
 	public int[] getValue() {
 		return this.registrador;

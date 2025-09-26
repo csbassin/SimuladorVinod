@@ -35,9 +35,10 @@ public class UnidadeControle extends Thread{
 	private int[] pcValueForPause = null;
 	private boolean pausaAutomaticaJaPassou = false;
 	private boolean resetar = false;
+	MicroprogramCounter mpc;
 	@Override
 	public void run() {
-		MicroprogramCounter mpc = MicroprogramCounter.getMpc();
+		mpc = MicroprogramCounter.getMpc();
 		MemoriaDeControle mc = MemoriaDeControle.getMemC();
 		MicroinstructionRegister mir = MicroinstructionRegister.getMir();
 		IncrementMicroprogramCounter impc = IncrementMicroprogramCounter.getImpc();
@@ -61,6 +62,8 @@ public class UnidadeControle extends Thread{
 		while(!stop) {
 			if(resetar) {
 				this.reset();
+				updateRegisterExibitionValue();
+				this.pause = true;
 				resetar = false;
 			}
 			long cycleStartTime = System.currentTimeMillis();
@@ -169,7 +172,7 @@ public class UnidadeControle extends Thread{
 				
 				long pausedTime = System.currentTimeMillis();
 				while(pause) { // gambiarra feia pra adicionar pausa aqui
-					sleep(1000);
+					sleep(100);
 					
 				}
 				long endOfPauseTime = System.currentTimeMillis()-pausedTime;
@@ -199,10 +202,9 @@ public class UnidadeControle extends Thread{
 		WindowData.f = Conversoes.bitArrayToC2(gr.get(15).getRegistrador());
 	}
 	public void reset() {
-		//this.interrupt();
 		gr.reset();
 		memoriaPrincipal.reset();
-		//uc = new UnidadeControle();
+		mpc.reset();
 	}
 	public int getSleepInMillis() {
 		return sleepInMillis;

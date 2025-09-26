@@ -95,6 +95,7 @@ public class ControlesWindow{
 		frame.getContentPane().add(separator);
 		
 		btnPause = new JButton("");
+		btnPause.setEnabled(false);
 		btnPause.setContentAreaFilled(false);
 		btnPause.setToolTipText("Pausar");
 		btnPause.setBackground(Color.GRAY);
@@ -119,12 +120,15 @@ public class ControlesWindow{
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!uc.isAlive()) {
+					btnPlay.setEnabled(false);
+					btnPause.setEnabled(true);
+					btnStop.setEnabled(true);
+					btnReset.setEnabled(true);
 					uc.start();
 					wu.start();
 				}else {
 					uc.setPause(false);
 					btnPlay.setEnabled(false);
-
 					btnPause.setEnabled(true);
 					
 				}
@@ -141,6 +145,7 @@ public class ControlesWindow{
 		frame.getContentPane().add(btnPlay);
 		
 		btnStop = new JButton("");
+		btnStop.setEnabled(false);
 		btnStop.setBackground(Color.GRAY);
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -190,9 +195,13 @@ public class ControlesWindow{
 		frame.getContentPane().add(btnAplicar);
 		
 		btnReset = new JButton("");
+		btnReset.setEnabled(false);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uc.setResetar(true);
+				btnStop.setEnabled(false);
+				btnPlay.setEnabled(true);
+				btnPause.setEnabled(false);
 			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnReset, 6, SpringLayout.SOUTH, separator);

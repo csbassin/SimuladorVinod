@@ -24,7 +24,7 @@ public class MainWindow {
 	private JTextArea txtCode;
 	private String[] title = new String[] {"Registrador", "Valor"};
 	private DefaultTableModel dtm = new DefaultTableModel(new String[0][2], title);
-	JTable tableProdutos;
+	JTable tableRegisters;
 	private JLabel lblNewLabel_1_2;
 	private JTextArea txtMicro;
 	private WindowUpdater wu;
@@ -82,8 +82,7 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		MainWindow currentJanela = this;
-		wu = WindowUpdater.getWu(this, 1000);
-		wu.memw = new MemoriaWindow();
+		wu = WindowUpdater.getWu(this,new MemoriaWindow(), new ProcessadorWindow(), 1000);
 		new ControlesWindow(wu);
 		uc = UnidadeControle.getUc();
 		
@@ -105,20 +104,7 @@ public class MainWindow {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(324, 40, 290, 184);
-		tableProdutos = new JTable(dtm);
-		dtm.addRow(new String[]{"PC", WindowData.pc});
-		dtm.addRow(new String[]{"AC", WindowData.ac});
-		dtm.addRow(new String[]{"SP", WindowData.sp});
-		dtm.addRow(new String[]{"IR", WindowData.ir});
-		dtm.addRow(new String[]{"TIR", WindowData.tir});
-		dtm.addRow(new String[]{"A", WindowData.a});
-		dtm.addRow(new String[]{"B", WindowData.b});
-		dtm.addRow(new String[]{"C", WindowData.c});
-		dtm.addRow(new String[]{"D", WindowData.d});
-		dtm.addRow(new String[]{"E", WindowData.e});
-		dtm.addRow(new String[]{"F", WindowData.f});
-		//tableProdutos.setBounds(scrollPane.getBounds());
-		scrollPane.setViewportView(tableProdutos);
+		
 		frame.getContentPane().add(scrollPane);
 		
 		lblNewLabel_1_2 = new JLabel("Microinstrução");
@@ -224,7 +210,7 @@ public class MainWindow {
 	}
 	
 	public void update() {
-		dtm.setValueAt(WindowData.pc, 0, 1);
+		/*dtm.setValueAt(WindowData.pc, 0, 1);
 		dtm.setValueAt(WindowData.ac, 1, 1);
 		dtm.setValueAt(WindowData.sp, 2, 1);
 		dtm.setValueAt(WindowData.ir, 3, 1);
@@ -234,7 +220,7 @@ public class MainWindow {
 		dtm.setValueAt(WindowData.c, 7, 1);
 		dtm.setValueAt(WindowData.d, 8, 1);
 		dtm.setValueAt(WindowData.e, 9, 1);
-		dtm.setValueAt(WindowData.f, 10, 1);
+		dtm.setValueAt(WindowData.f, 10, 1);*/
 		txtMicro.setText("Subciclo atual: "+WindowData.currentSub+"\nMicroinstrução atual: "+WindowData.microAtual);
 		lblTempo.setText("Tempo de execução: "+WindowData.executionTime+"ms");
 		

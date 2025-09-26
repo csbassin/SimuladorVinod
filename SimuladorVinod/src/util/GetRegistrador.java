@@ -48,7 +48,10 @@ public class GetRegistrador {
 		}
 		// reseta sp
 		this.get(2).set(new Integer[]{0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0});
-		
+		//reseta ir, tir
+		for (int i=3;  i<5; i++) {
+			this.get(i).set(new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+		}
 		//reseta a, b, c, d, e, f
 		for(int i = 10; i<16; i++) {
 			this.get(i).set(new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});

@@ -5,22 +5,25 @@ import main.UnidadeControle;
 public class WindowUpdater extends Thread{
 	private static WindowUpdater wu = null;
 	
-	public static WindowUpdater getWu(MainWindow mw, int sleep) {
+	public static WindowUpdater getWu(MainWindow mw, MemoriaWindow memw, ProcessadorWindow pw, int sleep) {
 		if(wu == null) {
-			wu = new WindowUpdater(mw, sleep);
+			wu = new WindowUpdater(mw, memw, pw, sleep);
 		}
 		return wu;
 	}
 	
 	private MainWindow mw;
-	public MemoriaWindow memw;
+	private MemoriaWindow memw;
+	private ProcessadorWindow pw;
 	int sleep;
 	private boolean pause;
 	private boolean stop = false;
 	UnidadeControle uc = UnidadeControle.getUc();
 	
-	private WindowUpdater(MainWindow mw, int sleep) {
+	private WindowUpdater(MainWindow mw, MemoriaWindow memw, ProcessadorWindow pw, int sleep) {
 		this.mw = mw;
+		this.memw = memw;
+		this.pw = pw;
 		this.sleep = sleep;
 	}
 	
@@ -34,10 +37,11 @@ public class WindowUpdater extends Thread{
 			//if(!uc.isResetar()) {
 				try {
 					while(pause) {
-						sleep(1000);
+						sleep(100);
 					}
 					mw.update();
 					memw.update();
+					pw.update();
 					sleep(sleep);
 					
 				} catch (InterruptedException e) {
