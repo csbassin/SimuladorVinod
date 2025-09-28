@@ -60,15 +60,35 @@ public class UnidadeControle extends Thread{
 		int contRead = 0, contWrite = 0;
 		long executionTime = 0;
 		while(!stop) {
-			if(resetar) {
-				this.reset();
-				updateRegisterExibitionValue();
-				this.pause = true;
-				resetar = false;
-			}
+			
 			long cycleStartTime = System.currentTimeMillis();
 			try {
+				// pausa do simulador
 				updateRegisterExibitionValue();
+				if(pcValueForPause!=null && pausaAutomaticaJaPassou == false) {
+					boolean igual = true;
+					int a = 0;
+					while(igual == true && a<pcValueForPause.length) {
+						if(pcValueForPause[a] != gr.get(0).getRegistrador()[a]) {
+							igual = false;
+						}
+						a++;
+					}
+					if(igual) {
+						pause = true;
+						pausaAutomaticaJaPassou = true;
+					}
+				}
+				
+				long pausedTime = System.currentTimeMillis();
+				while(pause) { // gambiarra feia pra adicionar pausa aqui
+					sleep(100);
+					
+				}
+				long endOfPauseTime = System.currentTimeMillis()-pausedTime;
+				sleep(sleepInMillis);
+				executionTime += System.currentTimeMillis()-cycleStartTime-endOfPauseTime; // tempo do ciclo = tempo atual - tempo do inicio - tempo pausado
+				WindowData.executionTime = String.valueOf(executionTime); 
 
 				//Subciclo 1
 				WindowData.currentSub = "1";
@@ -155,30 +175,14 @@ public class UnidadeControle extends Thread{
 
 				//				// fim subciclo 4 ------------------------------
 				
-				if(pcValueForPause!=null && pausaAutomaticaJaPassou == false) {
-					boolean igual = true;
-					int a = 0;
-					while(igual == true && a<pcValueForPause.length) {
-						if(pcValueForPause[a] != gr.get(0).getRegistrador()[a]) {
-							igual = false;
-						}
-						a++;
-					}
-					if(igual) {
-						pause = true;
-						pausaAutomaticaJaPassou = true;
-					}
-				}
 				
-				long pausedTime = System.currentTimeMillis();
-				while(pause) { // gambiarra feia pra adicionar pausa aqui
-					sleep(100);
-					
+				
+				if(resetar) {
+					this.reset();
+					updateRegisterExibitionValue();
+					this.pause = true;
+					resetar = false;
 				}
-				long endOfPauseTime = System.currentTimeMillis()-pausedTime;
-				sleep(sleepInMillis);
-				executionTime += System.currentTimeMillis()-cycleStartTime-endOfPauseTime; // tempo do ciclo = tempo atual - tempo do inicio - tempo pausado
-				WindowData.executionTime = String.valueOf(executionTime); 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -205,6 +209,7 @@ public class UnidadeControle extends Thread{
 		gr.reset();
 		memoriaPrincipal.reset();
 		mpc.reset();
+		System.out.println("Terminei de resetar");
 	}
 	public int getSleepInMillis() {
 		return sleepInMillis;

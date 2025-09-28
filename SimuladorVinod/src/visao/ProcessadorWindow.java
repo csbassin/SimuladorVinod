@@ -74,6 +74,8 @@ public class ProcessadorWindow{
 	private final JLabel lblNewLabel = new JLabel("Processador");
 	private JTable tableRegisters;
 	private JTextArea txtMicro;
+	private JScrollPane scrollPane;
+	private JLabel lblStatus;
 	
 	public static void main(String[] args) {
 		try {
@@ -106,7 +108,7 @@ public class ProcessadorWindow{
 		
 		JFrame frame = new JFrame();
 		frame.setTitle("Endereços em azul são parte da pilha. Endereço em cinza é para onde o PC aponta no momento.");
-		frame.setBounds(0, 0, 670, 400);
+		frame.setBounds(0, 0, 670, 470);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
@@ -124,11 +126,11 @@ public class ProcessadorWindow{
 		springLayout.putConstraint(SpringLayout.EAST, separator, -10, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(separator);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		springLayout.putConstraint(SpringLayout.WEST, scrollPane, 20, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -20, SpringLayout.SOUTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, scrollPane, -324, SpringLayout.EAST, separator);
 		tableRegisters = new JTable(dtm);
+		tableRegisters.setCellSelectionEnabled(false);
 		dtm.addRow(new String[]{"PC", WindowData.pc});
 		dtm.addRow(new String[]{"AC", WindowData.ac});
 		dtm.addRow(new String[]{"SP", WindowData.sp});
@@ -145,14 +147,13 @@ public class ProcessadorWindow{
 		frame.getContentPane().add(scrollPane);
 		
 		
-		JLabel lblNewLabel_1_1 = new JLabel("Registradores");
-		springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 6, SpringLayout.SOUTH, lblNewLabel_1_1);
-		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel_1_1, 0, SpringLayout.EAST, scrollPane);
-		lblNewLabel_1_1.setForeground(new Color(255, 255, 255));
-		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1_1, 6, SpringLayout.SOUTH, separator);
-		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1_1, 20, SpringLayout.WEST, frame.getContentPane());
-		lblNewLabel_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		frame.getContentPane().add(lblNewLabel_1_1);
+		JLabel lblRegs = new JLabel("Registradores");
+		springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 6, SpringLayout.SOUTH, lblRegs);
+		springLayout.putConstraint(SpringLayout.WEST, lblRegs, 20, SpringLayout.WEST, frame.getContentPane());
+		lblRegs.setForeground(new Color(255, 255, 255));
+		springLayout.putConstraint(SpringLayout.NORTH, lblRegs, 6, SpringLayout.SOUTH, separator);
+		lblRegs.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		frame.getContentPane().add(lblRegs);
 		
 		txtMicro = new JTextArea();
 		txtMicro.setWrapStyleWord(true);
@@ -160,24 +161,47 @@ public class ProcessadorWindow{
 		txtMicro.setEditable(false);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Histórico de Microinstruções");
+		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel_1_1_1, -20, SpringLayout.EAST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, lblRegs, -10, SpringLayout.WEST, lblNewLabel_1_1_1);
 		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1_1_1, 6, SpringLayout.SOUTH, separator);
-		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1_1_1, 332, SpringLayout.WEST, txtMicro);
 		lblNewLabel_1_1_1.setForeground(Color.WHITE);
 		lblNewLabel_1_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		frame.getContentPane().add(lblNewLabel_1_1_1);
 		
 		JScrollPane scrollMicro = new JScrollPane();
-		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel_1_1_1, 0, SpringLayout.EAST, scrollMicro);
+		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1_1_1, 0, SpringLayout.WEST, scrollMicro);
+		springLayout.putConstraint(SpringLayout.WEST, scrollMicro, 10, SpringLayout.EAST, scrollPane);
+		springLayout.putConstraint(SpringLayout.SOUTH, scrollMicro, -141, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, scrollMicro, -20, SpringLayout.EAST, frame.getContentPane());
 		scrollMicro.setViewportView(txtMicro);
 		springLayout.putConstraint(SpringLayout.NORTH, scrollMicro, 34, SpringLayout.SOUTH, separator);
-		springLayout.putConstraint(SpringLayout.WEST, scrollMicro, 10, SpringLayout.EAST, scrollPane);
-		springLayout.putConstraint(SpringLayout.SOUTH, scrollMicro, -20, SpringLayout.SOUTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, scrollMicro, -20, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(scrollMicro);
+		
+		lblStatus = new JLabel("A simulação ainda não começou");
+		springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -5, SpringLayout.NORTH, lblStatus);
+		springLayout.putConstraint(SpringLayout.NORTH, lblStatus, -40, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, lblStatus, -20, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, lblStatus, 0, SpringLayout.WEST, scrollPane);
+		springLayout.putConstraint(SpringLayout.EAST, lblStatus, 0, SpringLayout.EAST, scrollPane);
+		lblStatus.setForeground(Color.WHITE);
+		lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		frame.getContentPane().add(lblStatus);
 	}
 	
 	
 	public void update() {
+		dtm.setValueAt(WindowData.pc, 0, 1);
+		dtm.setValueAt(WindowData.ac, 1, 1);
+		dtm.setValueAt(WindowData.sp, 2, 1);
+		dtm.setValueAt(WindowData.ir, 3, 1);
+		dtm.setValueAt(WindowData.tir, 4, 1);
+		dtm.setValueAt(WindowData.a, 5, 1);
+		dtm.setValueAt(WindowData.b, 6, 1);
+		dtm.setValueAt(WindowData.c, 7, 1);
+		dtm.setValueAt(WindowData.d, 8, 1);
+		dtm.setValueAt(WindowData.e, 9, 1);
+		dtm.setValueAt(WindowData.f, 10, 1);
+		
 		if(txtMicro.getText().length()>50000) { // limpa se tiver mais de 50 mil caracteres pra não comer muita memória
 			txtMicro.setText("");
 		}

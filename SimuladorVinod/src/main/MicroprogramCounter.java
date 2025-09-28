@@ -4,7 +4,7 @@ import modelo.registradores.Registrador;
 
 public class MicroprogramCounter extends Registrador{
 	private static MicroprogramCounter mpc = null;
-	// quem diabos criou isso com 32 bits?
+	// quem diabos criou isso com 32 bits? E, por alguma razão, só funcona se tiver com 32...
 	private MicroprogramCounter() {
 		super(32);
 	}
