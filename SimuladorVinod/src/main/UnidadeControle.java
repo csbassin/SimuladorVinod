@@ -194,7 +194,8 @@ public class UnidadeControle extends Thread{
 				e.printStackTrace();
 			}
 			
-			i++;	
+			i++;
+			WindowData.ciclos = i;
 		}
 		
 	}

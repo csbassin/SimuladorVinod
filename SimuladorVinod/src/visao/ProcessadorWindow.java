@@ -82,6 +82,7 @@ public class ProcessadorWindow{
 	private JScrollPane scrollPane;
 	private JLabel lblStatus;
 	private JLabel lblTempoExec;
+	private JLabel lblCiclos;
 	
 	public static void main(String[] args) {
 		try {
@@ -191,9 +192,8 @@ public class ProcessadorWindow{
 		frame.getContentPane().add(scrollMicro);
 		
 		lblStatus = new JLabel("A simulação ainda não começou");
-		springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -132, SpringLayout.NORTH, lblStatus);
+		springLayout.putConstraint(SpringLayout.EAST, lblStatus, 0, SpringLayout.EAST, lblNewLabel_1_1_1);
 		springLayout.putConstraint(SpringLayout.WEST, lblStatus, 20, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, lblStatus, -334, SpringLayout.EAST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.NORTH, lblStatus, -40, SpringLayout.SOUTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, lblStatus, -20, SpringLayout.SOUTH, frame.getContentPane());
 		lblStatus.setForeground(Color.WHITE);
@@ -201,17 +201,27 @@ public class ProcessadorWindow{
 		frame.getContentPane().add(lblStatus);
 		
 		lblTempoExec = new JLabel("Tempo de execução: 0ms");
-		springLayout.putConstraint(SpringLayout.NORTH, lblTempoExec, -25, SpringLayout.NORTH, lblStatus);
-		springLayout.putConstraint(SpringLayout.WEST, lblTempoExec, 0, SpringLayout.WEST, scrollPane);
+		springLayout.putConstraint(SpringLayout.NORTH, lblTempoExec, 412, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, lblTempoExec, -5, SpringLayout.NORTH, lblStatus);
+		springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -107, SpringLayout.NORTH, lblTempoExec);
+		springLayout.putConstraint(SpringLayout.WEST, lblTempoExec, 0, SpringLayout.WEST, scrollPane);
 		springLayout.putConstraint(SpringLayout.EAST, lblTempoExec, 0, SpringLayout.EAST, lblNewLabel_1_1_1);
 		lblTempoExec.setForeground(Color.WHITE);
 		lblTempoExec.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		frame.getContentPane().add(lblTempoExec);
+		
+		lblCiclos = new JLabel("Ciclos: 0");
+		springLayout.putConstraint(SpringLayout.WEST, lblCiclos, 0, SpringLayout.WEST, scrollPane);
+		springLayout.putConstraint(SpringLayout.SOUTH, lblCiclos, -6, SpringLayout.NORTH, lblTempoExec);
+		springLayout.putConstraint(SpringLayout.EAST, lblCiclos, 0, SpringLayout.EAST, lblNewLabel_1_1_1);
+		lblCiclos.setForeground(Color.WHITE);
+		lblCiclos.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		frame.getContentPane().add(lblCiclos);
 	}
 	
 	
 	public void update() {
+		lblCiclos.setText("Ciclos: "+WindowData.ciclos);
 		lblTempoExec.setText("Tempo de execução: "+WindowData.executionTime+"ms");
 		lblStatus.setText(WindowData.statusSimulacao);
 		dtm.setValueAt(WindowData.pc, 0, 1);

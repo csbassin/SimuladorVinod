@@ -16,4 +16,5 @@ public class WindowData {
 	public static String microAtual = "";
 	public static String executionTime = "";
 	public static String statusSimulacao = "";
+	public static int ciclos = 0;
 }

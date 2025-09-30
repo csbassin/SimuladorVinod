@@ -53,7 +53,7 @@ public class ControlesWindow{
 	private JButton btnReset;
 	private JSpinner spnPausaPC;
 	private JLabel lblNewLabel_1_2;
-	private JButton btnAplicar_1_1;
+	private JButton btnPausaAuto;
 	private JPanel panePasso;
 	private JCheckBox checkPasso;
 	private JButton btnPassarCiclo;
@@ -224,13 +224,18 @@ public class ControlesWindow{
 		lblNewLabel_1_2.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		frame.getContentPane().add(lblNewLabel_1_2);
 		
-		btnAplicar_1_1 = new JButton("Aplicar");
-		btnAplicar_1_1.setBounds(358, 229, 65, 26);
-		btnAplicar_1_1.setForeground(Color.WHITE);
-		btnAplicar_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnAplicar_1_1.setContentAreaFilled(false);
-		btnAplicar_1_1.setBorder(new LineBorder(Color.WHITE, 2));
-		frame.getContentPane().add(btnAplicar_1_1);
+		btnPausaAuto = new JButton("Aplicar");
+		btnPausaAuto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				uc.setPcValueForPause(Integer.parseInt(spnPausaPC.getValue().toString()));
+			}
+		});
+		btnPausaAuto.setBounds(358, 229, 65, 26);
+		btnPausaAuto.setForeground(Color.WHITE);
+		btnPausaAuto.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnPausaAuto.setContentAreaFilled(false);
+		btnPausaAuto.setBorder(new LineBorder(Color.WHITE, 2));
+		frame.getContentPane().add(btnPausaAuto);
 		
 		panePasso = new JPanel();
 		panePasso.setBackground(Color.DARK_GRAY);
