@@ -7,7 +7,6 @@ import javax.swing.JTextArea;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JLabel;
 import main.UnidadeControle;

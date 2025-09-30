@@ -35,6 +35,7 @@ public class UnidadeControle extends Thread{
 	private int[] pcValueForPause = null;
 	private boolean pausaAutomaticaJaPassou = false;
 	private boolean resetar = false;
+	private boolean modoPassoAPasso = false;
 	MicroprogramCounter mpc;
 	@Override
 	public void run() {
@@ -78,6 +79,9 @@ public class UnidadeControle extends Thread{
 						pause = true;
 						pausaAutomaticaJaPassou = true;
 					}
+				}
+				if(modoPassoAPasso) {
+					pause = true;
 				}
 				if(pause) {
 					WindowData.statusSimulacao = "Simulação Pausada";
@@ -258,7 +262,13 @@ public class UnidadeControle extends Thread{
 	public void setStop(boolean stop) {
 		this.stop = stop;
 	}
-
+	
+	public boolean isModoPassoAPasso() {
+		return modoPassoAPasso;
+	}
+	public void setModoPassoAPasso(boolean modoPassoAPasso) {
+		this.modoPassoAPasso = modoPassoAPasso;
+	}
 	public int[] getPcValueForPause() {
 		return pcValueForPause;
 	}
