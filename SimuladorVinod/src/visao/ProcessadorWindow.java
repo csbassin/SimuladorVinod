@@ -11,12 +11,16 @@ import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import main.UnidadeControle;
 import modelo.MemoriaPrincipal;
 import util.Conversoes;
 import util.GetRegistrador;
 import util.Montador;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -24,6 +28,7 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.SpringLayout;
 import javax.swing.JSeparator;
@@ -76,6 +81,7 @@ public class ProcessadorWindow{
 	private JTextArea txtMicro;
 	private JScrollPane scrollPane;
 	private JLabel lblStatus;
+	private JLabel lblTempoExec;
 	
 	public static void main(String[] args) {
 		try {
@@ -107,10 +113,17 @@ public class ProcessadorWindow{
 	private void initialize() {
 		
 		JFrame frame = new JFrame();
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				JOptionPane.showMessageDialog(null, "O simulador deve ser fechado pela janela \"Programa\".");
+			}
+		});
+		frame.setMinimumSize(new Dimension(670, 516));
 		frame.setTitle("Endereços em azul são parte da pilha. Endereço em cinza é para onde o PC aponta no momento.");
-		frame.setBounds(0, 0, 670, 470);
+		frame.setBounds(0, 0, 670, 516);
 		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel, 10, SpringLayout.NORTH, frame.getContentPane());
@@ -161,6 +174,7 @@ public class ProcessadorWindow{
 		txtMicro.setEditable(false);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Histórico de Microinstruções");
+		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1_1_1, 10, SpringLayout.EAST, scrollPane);
 		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel_1_1_1, -20, SpringLayout.EAST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, lblRegs, -10, SpringLayout.WEST, lblNewLabel_1_1_1);
 		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1_1_1, 6, SpringLayout.SOUTH, separator);
@@ -169,27 +183,37 @@ public class ProcessadorWindow{
 		frame.getContentPane().add(lblNewLabel_1_1_1);
 		
 		JScrollPane scrollMicro = new JScrollPane();
-		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1_1_1, 0, SpringLayout.WEST, scrollMicro);
+		springLayout.putConstraint(SpringLayout.NORTH, scrollMicro, 6, SpringLayout.SOUTH, lblNewLabel_1_1_1);
 		springLayout.putConstraint(SpringLayout.WEST, scrollMicro, 10, SpringLayout.EAST, scrollPane);
-		springLayout.putConstraint(SpringLayout.SOUTH, scrollMicro, -141, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, scrollMicro, 0, SpringLayout.SOUTH, scrollPane);
 		springLayout.putConstraint(SpringLayout.EAST, scrollMicro, -20, SpringLayout.EAST, frame.getContentPane());
 		scrollMicro.setViewportView(txtMicro);
-		springLayout.putConstraint(SpringLayout.NORTH, scrollMicro, 34, SpringLayout.SOUTH, separator);
 		frame.getContentPane().add(scrollMicro);
 		
 		lblStatus = new JLabel("A simulação ainda não começou");
-		springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -5, SpringLayout.NORTH, lblStatus);
+		springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -132, SpringLayout.NORTH, lblStatus);
+		springLayout.putConstraint(SpringLayout.WEST, lblStatus, 20, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, lblStatus, -334, SpringLayout.EAST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.NORTH, lblStatus, -40, SpringLayout.SOUTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, lblStatus, -20, SpringLayout.SOUTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, lblStatus, 0, SpringLayout.WEST, scrollPane);
-		springLayout.putConstraint(SpringLayout.EAST, lblStatus, 0, SpringLayout.EAST, scrollPane);
 		lblStatus.setForeground(Color.WHITE);
 		lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		frame.getContentPane().add(lblStatus);
+		
+		lblTempoExec = new JLabel("Tempo de execução: 0ms");
+		springLayout.putConstraint(SpringLayout.NORTH, lblTempoExec, -25, SpringLayout.NORTH, lblStatus);
+		springLayout.putConstraint(SpringLayout.WEST, lblTempoExec, 0, SpringLayout.WEST, scrollPane);
+		springLayout.putConstraint(SpringLayout.SOUTH, lblTempoExec, -5, SpringLayout.NORTH, lblStatus);
+		springLayout.putConstraint(SpringLayout.EAST, lblTempoExec, 0, SpringLayout.EAST, lblNewLabel_1_1_1);
+		lblTempoExec.setForeground(Color.WHITE);
+		lblTempoExec.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		frame.getContentPane().add(lblTempoExec);
 	}
 	
 	
 	public void update() {
+		lblTempoExec.setText("Tempo de execução: "+WindowData.executionTime+"ms");
+		lblStatus.setText(WindowData.statusSimulacao);
 		dtm.setValueAt(WindowData.pc, 0, 1);
 		dtm.setValueAt(WindowData.ac, 1, 1);
 		dtm.setValueAt(WindowData.sp, 2, 1);

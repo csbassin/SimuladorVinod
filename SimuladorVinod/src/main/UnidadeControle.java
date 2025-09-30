@@ -79,12 +79,15 @@ public class UnidadeControle extends Thread{
 						pausaAutomaticaJaPassou = true;
 					}
 				}
-				
+				if(pause) {
+					WindowData.statusSimulacao = "Simulação Pausada";
+				}
 				long pausedTime = System.currentTimeMillis();
 				while(pause) { // gambiarra feia pra adicionar pausa aqui
 					sleep(100);
 					
 				}
+				WindowData.statusSimulacao = "Simulação Rodando";
 				long endOfPauseTime = System.currentTimeMillis()-pausedTime;
 				sleep(sleepInMillis);
 				executionTime += System.currentTimeMillis()-cycleStartTime-endOfPauseTime; // tempo do ciclo = tempo atual - tempo do inicio - tempo pausado

@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JSeparator;
 import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
@@ -86,6 +88,7 @@ public class MainWindow {
 		uc = UnidadeControle.getUc();
 		
 		frame = new JFrame();
+		frame.setMinimumSize(new Dimension(395, 375));
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
 		frame.setBounds(100, 100, 395, 375);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

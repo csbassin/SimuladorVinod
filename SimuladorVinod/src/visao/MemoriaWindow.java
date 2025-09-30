@@ -11,12 +11,16 @@ import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import main.UnidadeControle;
 import modelo.MemoriaPrincipal;
 import util.Conversoes;
 import util.GetRegistrador;
 import util.Montador;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -24,6 +28,7 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.SpringLayout;
 import javax.swing.JSeparator;
@@ -74,7 +79,7 @@ public class MemoriaWindow{
 	    }
 	}
 	
-	private String[] colunas = {"Endereço", "Valor Binário", "Valor Decimal", "Valor Hexadecimal"};
+	private String[] colunas = {"Endereço", "Valor Binário (C2)", "Valor Decimal", "Valor Hexadecimal"};
 	private CustomTableModel dtm = new CustomTableModel(colunas, 0);
 	private JTable tabelaMemoria;
 	private final JLabel lblNewLabel = new JLabel("Memória Principal");
@@ -114,10 +119,17 @@ public class MemoriaWindow{
 	private void initialize() {
 		
 		JFrame frame = new JFrame();
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				JOptionPane.showMessageDialog(null, "O simulador deve ser fechado pela janela \"Programa\".");
+			}
+		});
 		frame.setTitle("Endereços em azul são parte da pilha. Endereço em cinza é para onde o PC aponta no momento.");
+		frame.setMinimumSize(new Dimension(500, 375));
 		frame.setBounds(0, 0, 670, 400);
 		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
 		SpringLayout springLayout = new SpringLayout();
 		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel, 10, SpringLayout.NORTH, frame.getContentPane());
@@ -158,9 +170,9 @@ public class MemoriaWindow{
 	public void update() {
 		lastPc = currentPc;
 		for(int i = 0; i<4096; i++) {
-			int currentValue = Conversoes.binaryIntToDecimal(UnidadeControle.getUc().memoriaPrincipal.get(i));
-			if(currentValue != 0) {
-				String binario = Conversoes.conversaoCompleta(currentValue, 16);
+			String currentValue = Conversoes.bitArrayToC2(UnidadeControle.getUc().memoriaPrincipal.get(i));
+			if(!(currentValue.equals(dtm.getValueAt(i, 2).toString()))) { // se o novo valor for igual ao antigo, não atualiza. Otimização?
+				String binario = Conversoes.integerArrayToString(UnidadeControle.getUc().memoriaPrincipal.get(i));
 				dtm.setValueAt(binario, i, 1); // seta o binário
 				dtm.setValueAt(currentValue, i, 2); // seta o decimal
 				dtm.setValueAt(Conversoes.binaryToHex(binario), i, 3); // seta o hex	
