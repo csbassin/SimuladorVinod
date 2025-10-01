@@ -83,6 +83,7 @@ public class ProcessadorWindow{
 	private JLabel lblStatus;
 	private JLabel lblTempoExec;
 	private JLabel lblCiclos;
+	private JScrollPane scrollMicro;
 	
 	public static void main(String[] args) {
 		try {
@@ -183,7 +184,7 @@ public class ProcessadorWindow{
 		lblNewLabel_1_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		frame.getContentPane().add(lblNewLabel_1_1_1);
 		
-		JScrollPane scrollMicro = new JScrollPane();
+		scrollMicro = new JScrollPane();
 		springLayout.putConstraint(SpringLayout.NORTH, scrollMicro, 6, SpringLayout.SOUTH, lblNewLabel_1_1_1);
 		springLayout.putConstraint(SpringLayout.WEST, scrollMicro, 10, SpringLayout.EAST, scrollPane);
 		springLayout.putConstraint(SpringLayout.SOUTH, scrollMicro, 0, SpringLayout.SOUTH, scrollPane);
@@ -242,6 +243,7 @@ public class ProcessadorWindow{
 		String mant = txtMicro.getText(); 
 		if(!(mant.substring(mant.lastIndexOf("\n")+1).equals(WindowData.microAtual))) {
 			txtMicro.setText(txtMicro.getText()+"\n\n"+WindowData.microAtual);
+			//scrollMicro.scroll
 		}
 	}
 }

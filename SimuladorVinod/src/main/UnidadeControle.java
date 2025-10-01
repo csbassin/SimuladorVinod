@@ -91,11 +91,10 @@ public class UnidadeControle extends Thread{
 					sleep(100);
 					
 				}
-				WindowData.statusSimulacao = "Simulação Rodando";
 				long endOfPauseTime = System.currentTimeMillis()-pausedTime;
+				WindowData.statusSimulacao = "Simulação Rodando";
 				sleep(sleepInMillis);
-				executionTime += System.currentTimeMillis()-cycleStartTime-endOfPauseTime; // tempo do ciclo = tempo atual - tempo do inicio - tempo pausado
-				WindowData.executionTime = String.valueOf(executionTime); 
+				
 
 				//Subciclo 1
 				WindowData.currentSub = "1";
@@ -190,10 +189,11 @@ public class UnidadeControle extends Thread{
 					this.pause = true;
 					resetar = false;
 				}
+				executionTime += System.currentTimeMillis()-cycleStartTime-endOfPauseTime; // tempo do ciclo = tempo atual - tempo do inicio - tempo pausado
+				WindowData.executionTime = String.valueOf(executionTime); 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
 			i++;
 			WindowData.ciclos = i;
 		}
