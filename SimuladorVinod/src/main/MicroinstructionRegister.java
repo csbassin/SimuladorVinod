@@ -20,7 +20,11 @@ public class MicroinstructionRegister extends Registrador{
 		}
 		return mir;
 	}
-	
+	public void reset() {
+		for(int i = 0; i<32; i++) {
+			this.registrador[i] = 0;
+		}
+	}
 	public ArrayList<Integer> getPieceAs32bit(int start, int end){
 		ArrayList<Integer> list = new ArrayList<>(32);
 		for(int i = start; i<=end; i++) {

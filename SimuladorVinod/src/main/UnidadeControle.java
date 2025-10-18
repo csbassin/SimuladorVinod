@@ -37,11 +37,12 @@ public class UnidadeControle extends Thread{
 	private boolean resetar = false;
 	private boolean modoPassoAPasso = false;
 	MicroprogramCounter mpc;
+	MicroinstructionRegister mir;
 	@Override
 	public void run() {
 		mpc = MicroprogramCounter.getMpc();
 		MemoriaDeControle mc = MemoriaDeControle.getMemC();
-		MicroinstructionRegister mir = MicroinstructionRegister.getMir();
+		mir = MicroinstructionRegister.getMir();
 		IncrementMicroprogramCounter impc = IncrementMicroprogramCounter.getImpc();
 		ControladorDeFluxo cdf = ControladorDeFluxo.getCf();
 		MMux mmux = MMux.getMmux();
@@ -217,6 +218,7 @@ public class UnidadeControle extends Thread{
 		gr.reset();
 		memoriaPrincipal.reset();
 		mpc.reset();
+		mir.reset();
 		System.out.println("Terminei de resetar");
 	}
 	public int getSleepInMillis() {

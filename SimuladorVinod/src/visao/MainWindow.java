@@ -89,7 +89,7 @@ public class MainWindow {
 		frame = new JFrame();
 		frame.setMinimumSize(new Dimension(395, 375));
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
-		frame.setBounds(100, 100, 395, 375);
+		frame.setBounds(680, 0, 395, 375);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Simulador MIC-1 - Por Cauã Bassin, Lucas Avelar, Bernardo Rebello, Vitor Lemos e Allan Gaetani");
 		SpringLayout springLayout = new SpringLayout();

@@ -123,7 +123,7 @@ public class ProcessadorWindow{
 		});
 		frame.setMinimumSize(new Dimension(670, 516));
 		frame.setTitle("Endereços em azul são parte da pilha. Endereço em cinza é para onde o PC aponta no momento.");
-		frame.setBounds(0, 0, 670, 516);
+		frame.setBounds(0, 410, 670, 516);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.DARK_GRAY);
@@ -243,7 +243,7 @@ public class ProcessadorWindow{
 		String mant = txtMicro.getText(); 
 		if(!(mant.substring(mant.lastIndexOf("\n")+1).equals(WindowData.microAtual))) {
 			txtMicro.setText(txtMicro.getText()+"\n\n"+WindowData.microAtual);
-			//scrollMicro.scroll
+			scrollMicro.getVerticalScrollBar().setValue(scrollMicro.getVerticalScrollBar().getMaximum());
 		}
 	}
 }

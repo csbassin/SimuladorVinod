@@ -95,7 +95,7 @@ public class ControlesWindow{
 			}
 		});
 		frame.setTitle("Inicie, pause ou resete o processador");
-		frame.setBounds(0, 410, 459, 413);
+		frame.setBounds(680, 410, 459, 413);
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -176,6 +176,7 @@ public class ControlesWindow{
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		spinner = new JSpinner();
+		spinner.setValue(1000);
 		spinner.setBounds(20, 193, 227, 26);
 		spinner.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		frame.getContentPane().add(spinner);

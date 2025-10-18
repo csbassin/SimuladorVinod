@@ -29,8 +29,8 @@ public class Montador extends Thread{
 		instructions.put("JNEG", "1100");
 		instructions.put("JNZE", "1101");
 		instructions.put("CALL", "111000");
-		instructions.put("PSHI", "111001");
-		instructions.put("POPI", "111010");
+		instructions.put("PSHI", "1111000000000000");
+		instructions.put("POPI", "1111001000000000");
 		instructions.put("PUSH", "1111010000000000");
 		instructions.put("POP", "1111011000000000");
 		instructions.put("RETN", "1111100000000000");
@@ -53,8 +53,8 @@ public class Montador extends Thread{
 		operandSize.put("JNEG", 12);
 		operandSize.put("JNZE", 12);
 		operandSize.put("CALL", 10);
-		operandSize.put("PSHI", 10);
-		operandSize.put("POPI", 10);
+		operandSize.put("PSHI", 0);
+		operandSize.put("POPI", 0);
 		operandSize.put("PUSH", 0);
 		operandSize.put("POP", 0);
 		operandSize.put("RETN", 0);
