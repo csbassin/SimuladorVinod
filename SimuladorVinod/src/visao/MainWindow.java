@@ -80,6 +80,7 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		DiagramaWindow dw = new DiagramaWindow();
 		MainWindow currentJanela = this;
 		MemoriaWindow mw = new MemoriaWindow();
 		wu = WindowUpdater.getWu(this, mw, new ProcessadorWindow(), 1000);
